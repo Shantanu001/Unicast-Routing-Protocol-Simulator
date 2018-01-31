@@ -507,6 +507,7 @@ public class MainActivity extends JFrame {
     	add(p2);
     	add(p3);
     	
+    	
     	//Adding routing tables to JFrame
     	//row[1][1]= String.valueOf(555);
 		String col[] = {"Dest","Hop count","Next Hop"};
@@ -515,7 +516,7 @@ public class MainActivity extends JFrame {
 		tb.setToolTipText("TABLE FOR NODE A");
 		jp.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 
-	     JTable tb1 = new JTable(row1,col);
+	    JTable tb1 = new JTable(row1,col);
 		JScrollPane jp1 = new JScrollPane(tb1);
 		jp1.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 		//jp.setBounds(400,500,40,50);
@@ -525,7 +526,7 @@ public class MainActivity extends JFrame {
 		jp2.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 			//jp.setBounds(400,500,40,50);
 		
-			//p3.add(jp2);
+		//p3.add(jp2);
         add(new Label("hello"));
         JTable tb3 = new JTable(row3,col);
 		JScrollPane jp3 = new JScrollPane(tb3);
@@ -1123,7 +1124,7 @@ public class MainActivity extends JFrame {
 								{
 									if((i+1)==rip_x)
 									{
-										continue;
+									1	continue;
 									}
 									else
 									{
@@ -1632,9 +1633,11 @@ public class MainActivity extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-			 	JFrame ospf_cont = new JFrame();
+			 	/*JFrame ospf_cont = new JFrame();
 				ospf_cont.setSize(400, 500);
-				ospf_cont.setVisible(true);
+				ospf_cont.setVisible(true);*/
+				new ospf_Module();
+				
 			}
 		});
     	
@@ -1649,11 +1652,23 @@ public class MainActivity extends JFrame {
 				
 			}
 		});
-         		
+    	/*exit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+		          setVisible(false);
+		          dispose();
+		          System.exit(0);
+			}
+		});
+         	*/	
     }
+    
      
     public static void main(String[] args) {
 		new MainActivity();
+		/*ospf_Frame = new ospf_Module();*/
 	}
  
 }
