@@ -24,6 +24,8 @@ public class MainActivity extends JFrame {
 	int count=1;
 	int rip_x;  //variable to store input in RIP protocol
  	int rip_y;
+ 	JScrollPane jp;
+ //	int ospf_source; //getting the value of source node
 /* 	String row[][] = new row[10][10];
  	String row1[][] = new row[10][10];
  	String row2[][] = new row[10][10];
@@ -511,8 +513,9 @@ public class MainActivity extends JFrame {
     	//Adding routing tables to JFrame
     	//row[1][1]= String.valueOf(555);
 		String col[] = {"Dest","Hop count","Next Hop"};
+		/*col[0]="cost";*/
 	     JTable tb = new JTable(row,col);
-		JScrollPane jp = new JScrollPane(tb);
+		jp = new JScrollPane(tb);
 		tb.setToolTipText("TABLE FOR NODE A");
 		jp.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 
@@ -1124,7 +1127,7 @@ public class MainActivity extends JFrame {
 								{
 									if((i+1)==rip_x)
 									{
-									1	continue;
+									continue;
 									}
 									else
 									{
@@ -1285,6 +1288,7 @@ public class MainActivity extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
+						//jp.setVisible(false);
 						for(i=0;i<6;i++)
 						{
 							for(j=0;j<2;j++)
@@ -1633,13 +1637,105 @@ public class MainActivity extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-			 	/*JFrame ospf_cont = new JFrame();
-				ospf_cont.setSize(400, 500);
-				ospf_cont.setVisible(true);*/
-				new ospf_Module();
+				JButton cal_Ospf;
+				JButton close_Ospf ;
+				JTextField input1_Ospf; 
+				JLabel label1_Ospf;
+			
+			//Column value
+				changeName(tb,0,"Destination");
+				changeName(tb,1,"Next Router");
+				changeName(tb,2,"Cost");
+				changeName(tb1,0,"Destination");
+				changeName(tb1,1,"Next Router");
+				changeName(tb1,2,"Cost");
+				changeName(tb2,0,"Destination");
+				changeName(tb2,1,"Next Router");
+				changeName(tb2,2,"Cost");
+				changeName(tb3,0,"Destination");
+				changeName(tb3,1,"Next Router");
+				changeName(tb3,2,"Cost");
+				changeName(tb4,0,"Destination");
+				changeName(tb4,1,"Next Router");
+				changeName(tb4,2,"Cost");
+				changeName(tb5,0,"Destination");
+				changeName(tb5,1,"Next Router");
+				changeName(tb5,2,"Cost");
 				
-			}
-		});
+				//Creating Frame for ospf handler
+			JFrame ospf_cont = new JFrame();
+			ospf_cont.setSize(400,400);
+			
+			//Creating Jcomponents for ospf handler
+			label1_Ospf = new JLabel("Enter the source");
+		    input1_Ospf = new JTextField();
+			cal_Ospf  = new JButton ("CALCULATE");
+			close_Ospf  = new JButton ("CLOSE");
+					
+			
+			//Setting the layout for the Ospf Frame
+			//JPanel panel1_Ospf = new JPanel();
+			label1_Ospf.setBounds(150, 50, 100, 30);
+			ospf_cont.add(label1_Ospf);
+			input1_Ospf.setBounds(150, 100, 100, 30);
+			ospf_cont.add(input1_Ospf);
+			cal_Ospf.setBounds(125, 200, 150, 30);
+			ospf_cont.add(close_Ospf);
+			close_Ospf.setBounds(125, 250, 150, 30);
+			ospf_cont.add(cal_Ospf);
+			ospf_cont.setLayout(null);
+			ospf_cont.setVisible(true);
+			
+			jp.setVisible(false);
+			jp1.setVisible(false);
+			jp2.setVisible(false);
+			jp3.setVisible(false);
+			jp4.setVisible(false);
+			jp5.setVisible(false);
+			p3.setVisible(true);
+		
+		  //  tb = new JTable(row,ospf_col);
+		    cal_Ospf.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					int ospf_source;
+					ospf_source = Integer.parseInt(input1_Ospf.getText());
+					if(ospf_source==1)
+					{
+						
+						jp.setVisible(true);
+					}
+					else if(ospf_source==2)
+					{
+						jp1.setVisible(true);
+					}
+					else if(ospf_source==3)
+					{
+						jp2.setVisible(true);
+					}
+					else if(ospf_source==4)
+					{
+						jp3.setVisible(true);
+					}
+					else if(ospf_source==5)
+					{
+						jp4.setVisible(true);
+					}
+					else if(ospf_source==6)
+					{
+						jp5.setVisible(true);
+					}
+					else
+					{
+					    input1_Ospf.setText("");
+					}
+					}});		
+				}
+			});
+			
+
     	
     	bgp.addActionListener(new ActionListener() {  //Adding new window for gbp protocol
 			
@@ -1662,7 +1758,14 @@ public class MainActivity extends JFrame {
 		          System.exit(0);
 			}
 		});
-         	*/	
+         	*/
+    	
+ 
+    	
+    }
+    public void changeName(JTable table,int col_index,String col_name)
+    {
+    	table.getColumnModel().getColumn(col_index).setHeaderValue(col_name);
     }
     
      
