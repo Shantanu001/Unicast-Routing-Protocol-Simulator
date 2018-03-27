@@ -25,6 +25,9 @@ public class MainActivity extends JFrame {
 	int rip_x;  //variable to store input in RIP protocol
  	int rip_y;
  	JScrollPane jp;
+	boolean visited[] = new boolean[10];
+	Integer[][] ospf_row = new Integer[15][15];
+
  //	int ospf_source; //getting the value of source node
 /* 	String row[][] = new row[10][10];
  	String row1[][] = new row[10][10];
@@ -354,6 +357,13 @@ public class MainActivity extends JFrame {
 				 
 			}
 		});
+    	for(i=1;i<=6;i++)
+    	{
+    		for(j=1;j<=6;j++)
+    		{
+    			ospf_row[i][j]=999;
+    		}
+    	}
     	
         next.addActionListener(new ActionListener() {             //writing the function for next button
 			
@@ -364,6 +374,8 @@ public class MainActivity extends JFrame {
 				{
 			    	x_value = (Integer) xspin.getValue();
 			        y_value = (Integer) yspin.getValue();
+			        ospf_row[x_value][y_value]=1;
+			        ospf_row[y_value][x_value]=1;
 			        ed[x_value][y_value]=true;
 			        if(x_value==1)                                                             //Setting the values of initial routing table
 			        {	
@@ -1637,6 +1649,7 @@ public class MainActivity extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				repaint();
 				JButton cal_Ospf;
 				JButton close_Ospf ;
 				JTextField input1_Ospf; 
@@ -1644,23 +1657,23 @@ public class MainActivity extends JFrame {
 			
 			//Column value
 				changeName(tb,0,"Destination");
-				changeName(tb,1,"Next Router");
-				changeName(tb,2,"Cost");
+				changeName(tb,1,"Cost");
+				changeName(tb,2,"Next Router");
 				changeName(tb1,0,"Destination");
-				changeName(tb1,1,"Next Router");
-				changeName(tb1,2,"Cost");
+				changeName(tb1,1,"Cost");
+				changeName(tb1,2,"Next Router");
 				changeName(tb2,0,"Destination");
-				changeName(tb2,1,"Next Router");
-				changeName(tb2,2,"Cost");
+				changeName(tb2,1,"Cost");
+				changeName(tb2,2,"Next Router");
 				changeName(tb3,0,"Destination");
-				changeName(tb3,1,"Next Router");
-				changeName(tb3,2,"Cost");
+				changeName(tb3,1,"Cost");
+				changeName(tb3,2,"Next Router");
 				changeName(tb4,0,"Destination");
-				changeName(tb4,1,"Next Router");
-				changeName(tb4,2,"Cost");
+				changeName(tb4,1,"Cost");
+				changeName(tb4,2,"Next Router");
 				changeName(tb5,0,"Destination");
-				changeName(tb5,1,"Next Router");
-				changeName(tb5,2,"Cost");
+				changeName(tb5,1,"Cost");
+				changeName(tb5,2,"Next Router");
 				
 				//Creating Frame for ospf handler
 			JFrame ospf_cont = new JFrame();
@@ -1693,7 +1706,6 @@ public class MainActivity extends JFrame {
 			jp4.setVisible(false);
 			jp5.setVisible(false);
 			p3.setVisible(true);
-		
 		  //  tb = new JTable(row,ospf_col);
 		    cal_Ospf.addActionListener(new ActionListener() {
 				
@@ -1701,34 +1713,134 @@ public class MainActivity extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
 					int ospf_source;
+					
+					
 					ospf_source = Integer.parseInt(input1_Ospf.getText());
-					if(ospf_source==1)
-					{
+				    int dist[] = new int[10];
+				    int neigh[] = new int[10];
+				    
+				    	/*for(int l=1;l<=6;l++)
+				    	{
+				    		for(int k=1;k<=6;k++)
+				    		{  
+				    			System.out.println(ospf_row[l][k]);
+				    			}
+				    		System.out.println("\n");
+				    		}*/
+						for(i=1;i<=6;i++)
+						{
+							dist[i]=999;
+						}
+						dist[ospf_source]=0;
+						for(i=1;i<=6;i++)
+						{
+							visited[i]=false;
+						}
+						for(int m=1;m<=(Integer)n_num.getValue();m++)
+						{
+					      int min_index = minValue(dist); 
+					      System.out.println(min_index);	 
+					      int mm;
+					      for(mm=1;mm<=6;mm++)
+					      {
+					    	
+					    	if(ospf_row[min_index][mm]==1 && visited[mm]==false)
+					    	{
+					    		if(dist[min_index]+ospf_row[min_index][mm]<=dist[mm])
+					    		{
+					    			dist[mm]=dist[min_index]+ospf_row[min_index][mm];
+					    			neigh[mm]=min_index;
+	                               
+					    		}
+					    	}
+					      }
+						   
+						}
+					/*	for(i=1;i<=6;i++)
+						{
+							System.out.println(dist[i]);
+						}*/
+					/*	int temp1=0;
+						for (int lk=1;lk<=6;lk++)
+						{
+				            temp1 = neigh[lk];
+							while(true)
+							{
+								if(ospf_row[temp1][ospf_source]==1)
+								{
+									break;
+								}
+								else
+								{
+									temp1 = neigh[temp1];	
+								}
+								
+							}
+							neigh[lk]=temp1;
+						}*/
 						
-						jp.setVisible(true);
+						if(ospf_source==1)
+						{
+							for(i=0;i<6;i++)
+							{
+								tb.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
+								tb.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
+							}
+								
+							jp.setVisible(true);
 					}
 					else if(ospf_source==2)
 					{
+						for(i=0;i<6;i++)
+						{
+							tb1.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
+							tb1.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
+						}
 						jp1.setVisible(true);
 					}
 					else if(ospf_source==3)
 					{
+						for(i=0;i<6;i++)
+						{
+							tb2.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
+							tb2.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
+						}
 						jp2.setVisible(true);
 					}
 					else if(ospf_source==4)
 					{
+						for(i=0;i<6;i++)
+						{
+							tb3.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
+							tb3.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
+						}
 						jp3.setVisible(true);
 					}
 					else if(ospf_source==5)
 					{
+						for(i=0;i<6;i++)
+						{
+							tb4.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
+							tb4.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
+						}
 						jp4.setVisible(true);
 					}
 					else if(ospf_source==6)
 					{
+						for(i=0;i<6;i++)
+						{
+							tb5.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
+							tb5.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
+						}
 						jp5.setVisible(true);
 					}
 					else
 					{
+						for(i=0;i<6;i++)
+						{
+							tb5.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
+							tb5.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
+						}
 					    input1_Ospf.setText("");
 					}
 					}});		
@@ -1767,7 +1879,32 @@ public class MainActivity extends JFrame {
     {
     	table.getColumnModel().getColumn(col_index).setHeaderValue(col_name);
     }
-    
+    public int minValue(int dist[])
+    {
+    	
+    	 int minVal = 999;
+    	 int temp=0;
+    	//index_node = ospf_source;
+    	//if(visited[ospf_source]==true) {minVal=999;}
+    	for(i=1;i<=6;i++)
+    	{
+    		//System.out.println("dist" + visited[i]);
+    		if(minVal>dist[i]&&visited[i]==false)
+    			
+    			
+    		{
+    			//System.out.println("hello");
+    			//minVal = dist[i];
+    			temp = i;
+    		}
+    		
+    	}
+    	//System.out.println(index_node);	
+    	
+    	visited[temp]=true;
+    	
+    	return temp;
+    }
      
     public static void main(String[] args) {
 		new MainActivity();
