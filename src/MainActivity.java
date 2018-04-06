@@ -27,6 +27,8 @@ public class MainActivity extends JFrame {
  	JScrollPane jp;
 	boolean visited[] = new boolean[10];
 	Integer[][] ospf_row = new Integer[15][15];
+	int ospf_source;
+	  int neigh[] = new int[10];
 
  //	int ospf_source; //getting the value of source node
 /* 	String row[][] = new row[10][10];
@@ -1692,7 +1694,7 @@ public class MainActivity extends JFrame {
 			ospf_cont.add(label1_Ospf);
 			input1_Ospf.setBounds(150, 100, 100, 30);
 			ospf_cont.add(input1_Ospf);
-			cal_Ospf.setBounds(125, 200, 150, 30);
+			cal_Ospf.setBounds(125,	 200, 150, 30);
 			ospf_cont.add(close_Ospf);
 			close_Ospf.setBounds(125, 250, 150, 30);
 			ospf_cont.add(cal_Ospf);
@@ -1712,12 +1714,11 @@ public class MainActivity extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					// TODO Auto-generated method stub
-					int ospf_source;
+				
 					
 					
 					ospf_source = Integer.parseInt(input1_Ospf.getText());
 				    int dist[] = new int[10];
-				    int neigh[] = new int[10];
 				    
 				    	/*for(int l=1;l<=6;l++)
 				    	{
@@ -1748,13 +1749,20 @@ public class MainActivity extends JFrame {
 					    	{
 					    		if(dist[min_index]+ospf_row[min_index][mm]<=dist[mm])
 					    		{
-					    			dist[mm]=dist[min_index]+ospf_row[min_index][mm];
+				    			    dist[mm]=dist[min_index]+ospf_row[min_index][mm];
 					    			neigh[mm]=min_index;
 	                               
 					    		}
 					    	}
+					    	System.out.println(dist[mm]);
 					      }
 						   
+						}
+						for(int ed=1;ed<=(Integer)n_num.getValue();ed++)
+						{
+							if(ed==ospf_source||neigh[ed]==ospf_source) {neigh[ed]=0;continue;}
+							else
+							{neigh[ed]=check_next_route(neigh[ed],neigh);}
 						}
 					/*	for(i=1;i<=6;i++)
 						{
@@ -1894,7 +1902,7 @@ public class MainActivity extends JFrame {
     			
     		{
     			//System.out.println("hello");
-    			//minVal = dist[i];
+    			minVal = dist[i];
     			temp = i;
     		}
     		
@@ -1904,6 +1912,16 @@ public class MainActivity extends JFrame {
     	visited[temp]=true;
     	
     	return temp;
+    }
+    public int check_next_route(int x,int neigh[]) {
+    	if(ospf_row[ospf_source][x]!=1)
+    	{
+    		return check_next_route(neigh[x],neigh);
+    	}
+    	else
+		{
+    		return x;
+		}
     }
      
     public static void main(String[] args) {
