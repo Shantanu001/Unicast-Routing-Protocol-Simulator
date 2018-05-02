@@ -1862,10 +1862,9 @@ public class MainActivity extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				JFrame bgp_cont = new JFrame();
-				bgp_cont.setSize(400, 500);
-				bgp_cont.setVisible(true);
-				
+				setVisible(false);
+				BGP_protocol bgp_obj =  new BGP_protocol();
+				bgp_obj.setVisible(true);
 			}
 		});
     	/*exit.addActionListener(new ActionListener() {
