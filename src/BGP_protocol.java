@@ -23,6 +23,7 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.util.Arrays;
 public class BGP_protocol extends JFrame {
     boolean v1 = false;          //to set the visibility for nodes on panel 2
     boolean v2 = false;
@@ -31,6 +32,7 @@ public class BGP_protocol extends JFrame {
     boolean v5 = false;
     boolean v6 = false;
     int i,j;
+    int temp_value;
     String[][][] dup_row = new String[10][10][10];
     boolean ed[][] = new boolean[10][10];
     int x_value;    // First node value of edge
@@ -40,7 +42,11 @@ public class BGP_protocol extends JFrame {
     int as;
     int node_size;
     Integer[] as_node_list = new Integer[10];
+    Integer[] node_selector_list = new Integer[10];
     Integer[] node_list = new Integer[10];
+
+    Integer[] as_selector_list = new Integer[10];
+    Integer[] node_per_as_list = new Integer[10];
 	int vert[][];
 	int count=1;
 	int rip_x;  //variable to store input in RIP protocol
@@ -136,15 +142,16 @@ public class BGP_protocol extends JFrame {
     	JButton  next = new JButton("NEXT");   //to draw the value of edges
     	JButton  reset = new JButton("RESET");
     	JLabel as_detail = new JLabel("Select Autonomous System");
-    	SpinnerListModel as_list = new SpinnerListModel(as_node_list);
+    	SpinnerListModel as_list = new SpinnerListModel(as_selector_list);
     	JSpinner as_lists = new JSpinner(as_list);
-    	JLabel node_detail_label = new JLabel("Select Number of nodes for above Autonomous System");
-    	SpinnerListModel node_as = new SpinnerListModel(node_list);
+    	JLabel node_detail_label = new JLabel("Select number of nodes for above Autonomous System");
+    	SpinnerListModel node_as = new SpinnerListModel(node_per_as_list);
     	JSpinner node_per_as = new JSpinner(node_as);
     	JLabel node_add = new JLabel("Add nodes for the given Autonomous System");
-    	SpinnerListModel node_selector = new SpinnerListModel(node_list);
+    	SpinnerListModel node_selector = new SpinnerListModel(node_selector_list);
     	JSpinner node_selectors = new JSpinner(node_selector);
     	JButton  add = new JButton("ADD");
+    	JButton  next_submit = new JButton("NEXT");
     	((JSpinner.DefaultEditor)spin.getEditor()).getTextField().setEditable(false);//Disabling spinner from getting edited
     	((JSpinner.DefaultEditor)spin2.getEditor()).getTextField().setEditable(false);
     	((JSpinner.DefaultEditor)xspin.getEditor()).getTextField().setEditable(false);
@@ -181,6 +188,7 @@ public class BGP_protocol extends JFrame {
     	p1.add(node_add);
     	p1.add(node_selectors);
     	p1.add(add);
+    	p1.add(next_submit);
         //p1.add(); constraints);
     
     
@@ -196,14 +204,33 @@ public class BGP_protocol extends JFrame {
         add(p1);  //adding panels to Jframe
     	add(p2);
     	add(p3);
-    
+    next_submit.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			add.setEnabled(true);
+			add_count=1;
+			int temp_as = (int) as_list.getValue();
+        	delete_selected_as(temp_as);
+        	int temp_node_per_as = (int) node_per_as.getValue();
+        	for(int i=1;i<=temp_node_per_as;i++)
+        	{delete_selected_node_per_as(temp_value);temp_value--;}
+        	as_lists.setValue(null);
+        	node_per_as.setValue(null);
+			
+			
+		}
+	});
+    	
 	n_num.addChangeListener(new ChangeListener() {
 			
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				// TODO Auto-generated method stub
-			    node_size = (int) n_num.getValue();	  
-			    for(int i=1;i<=node_size;i++) {node_list[i]=i;}
+			    node_size = (int) n_num.getValue();	
+			    temp_value = (int) n_num.getValue();
+			    for(int i=1;i<=node_size;i++) {node_list[i]=i;node_selector_list[i]=i;node_per_as_list[i]=i;}
 			}
 		});
     	
@@ -213,7 +240,7 @@ public class BGP_protocol extends JFrame {
 			public void stateChanged(ChangeEvent arg0) {
 				// TODO Auto-generated method stub
 			    as = (Integer)as_num.getValue();	  
-			    for(int i=1;i<=as;i++) {as_node_list[i]=i;}
+			    for(int i=1;i<=as;i++) {as_node_list[i]=i;as_selector_list[i]=i;}
 			}
 		});
 	v_num.addChangeListener(new ChangeListener() {
@@ -224,19 +251,23 @@ public class BGP_protocol extends JFrame {
 		    edg = (Integer)as_num.getValue();	  
 		}
 	});
-	
 	  add.addActionListener(new ActionListener() {
 		
+		  
+		  
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			if(add_count<=node_size)
+		
+			int temp_selected_node = (int)node_selector.getValue();
+			delete_selected_node(temp_selected_node );
+			node_selector.setValue(null);
+			if(add_count<=(int) node_as.getValue()	)
 				{
-			    	x_value = (Integer) xspin.getValue();
-			        y_value = (Integer) yspin.getValue();
+			    	
 			       
 			        repaint();
-			        if(count==edg)
+			        if(add_count==(int) node_as.getValue()	)
 			        {
 			        	/*xspin.setEnabled(false);
 	                    yspin.setEnabled(false);
@@ -245,8 +276,14 @@ public class BGP_protocol extends JFrame {
 			    	    as_edge.setEnabled(false);
 			    	    spin.setEnabled(false);
 			    	    spin2.setEnabled(false);*/
+			        
+			        	
+			        /*	delete_selected_node_per_as(1);*/
+			        	add.setEnabled(false);
+			        	
+			        	
 			    	}
-			        count++;
+			        add_count++;
 				}
 			
 		}
@@ -345,6 +382,62 @@ public class BGP_protocol extends JFrame {
     	setVisible(true);
     
     }
+	public  void delete_selected_node(int x)
+	    {
+	        // Search x in array
+	        int i;
+	        for (i=1; i<=node_selector_list.length; i++)
+	            if (node_selector_list[i] == x)
+	                break;
+	  
+	        // If x found in array
+	        if (i <node_selector_list.length)
+	        {
+	            // reduce size of array and move all
+	            // elements on space ahead
+	            for (int j=i; j<node_selector_list.length-1; j++)
+	                node_selector_list[j] = node_selector_list[j+1];
+	        }
+	  
+	    }
+	public  void delete_selected_as(int x)
+    {
+        // Search x in array
+        int i;
+        for (i=1; i<=as_selector_list.length; i++)
+            if (as_selector_list[i] == x)
+                break;
+  
+        // If x found in array
+        if (i <as_selector_list.length)
+        {
+            // reduce size of array and move all
+            // elements on space ahead
+            for (int j=i; j<as_selector_list.length-1; j++)
+            	as_selector_list[j] = as_selector_list[j+1];
+        }
+  
+    }
+	public  void delete_selected_node_per_as(int x)
+    {
+        // Search x in array
+        int i;
+        for (i=1; i<=node_per_as_list.length; i++)
+            if (node_per_as_list[i] == x)
+                break;
+  
+        // If x found in array
+        if (i <node_per_as_list.length)
+        {
+            // reduce size of array and move all
+            // elements on space ahead
+            for (int j=i; j<node_per_as_list.length-1; j++)
+            	node_per_as_list[j] = node_per_as_list[j+1];
+        }
+  
+    }
+
+	
     public void changeName(JTable table,int col_index,String col_name)
     {
     	table.getColumnModel().getColumn(col_index).setHeaderValue(col_name);
