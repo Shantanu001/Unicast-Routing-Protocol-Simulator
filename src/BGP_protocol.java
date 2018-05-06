@@ -4,6 +4,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.Label;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -44,7 +45,7 @@ public class BGP_protocol extends JFrame {
     Integer[] as_node_list = new Integer[10];
     Integer[] node_selector_list = new Integer[10];
     Integer[] node_list = new Integer[10];
-
+    Integer[] speaker_node = new Integer[10];
     Integer[] as_selector_list = new Integer[10];
     Integer[] node_per_as_list = new Integer[10];
 	int vert[][];
@@ -57,7 +58,9 @@ public class BGP_protocol extends JFrame {
 	int ospf_source;
 	  int neigh[] = new int[10];
 	  int add_count=1;
-
+	  int as_value;
+	  int node_value=1;
+      Integer bgp_data[][]  = new Integer[10][10];
  //	int ospf_source; //getting the value of source node
 /* 	String row[][] = new row[10][10];
  	String row1[][] = new row[10][10];
@@ -72,18 +75,18 @@ public class BGP_protocol extends JFrame {
  			row[i][j]=
  		}
  	}*/
-	String row[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};           //routing table values
-	String row1[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};
-	String row2[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};
-	String row3[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};
-	String row4[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};
-	String row5[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};
-	String dups_row[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};           //duplicate table to initialise the vlaues
-	String dups_row1[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};
-	String dups_row2[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};
-	String dups_row3[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};
-	String dups_row4[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};
-	String dups_row5[][] = {{"1","999",""},{"2","999",""},{"3","999",""},{"4","999",""},{"5","999",""},{"6","999",""}};
+	String row[][] = {{"1",""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};           //routing table values
+	String row1[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
+	String row2[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
+	String row3[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
+	String row4[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
+	String row5[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
+	String dups_row[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};           //duplicate table to initialise the vlaues
+	String dups_row1[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
+	String dups_row2[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
+	String dups_row3[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
+	String dups_row4[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
+	String dups_row5[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
 	JPanel p2;
     JPanel p3;
     JTable node_a,node_b,node_c,node_d,node_e,node_f; //initialising tables for routing table;
@@ -95,9 +98,141 @@ public class BGP_protocol extends JFrame {
 	JButton cal = new JButton("CALCULATE");
 	JButton fin  = new JButton ("FINAL");
 	JButton close = new JButton ("EXIT");
-   
+	  public void paint(Graphics g) {
+	    	// TODO Auto-generated method stub
+	    	 int x_dis = screenSize.width/2;
+	    	 x_dis/=2;
+	    	super.paintComponents(g);
+	    	g.setColor(Color.GREEN);
+	    	for(int i=1;i<=6;i++)
+	    	{
+	    		if(i==1) {g.setColor(Color.BLUE);}
+	    		if(i==2) {g.setColor(Color.RED);}
+	    		if(i==3) {g.setColor(Color.PINK);}
+	    		if(i==4) {g.setColor(Color.CYAN);}
+	    		if(i==5) {g.setColor(Color.MAGENTA);}
+	    		if(i==6) {g.setColor(Color.YELLOW);}
+	    		if(speaker_node[i]!=999)
+	    		{
+	    			if(speaker_node[i]==1)
+	    	    	{
+	    	    		g.drawOval(screenSize.width/2+x_dis, 100, 10, 10);
+	    	            g.fillOval(screenSize.width/2+x_dis, 100, 10, 10);
+	    	           // g.drawOval(screenSize.width/2+x_dis+50, 100, 20, 20);
+//	    	            g.drawChars('A',screenSize.width/2+x_dis+20, 100, 10, 10);
+	    	           // g.drawChars(arg0, arg1, arg2, arg3, arg4);
+	    	    	}
+	    	    	if(speaker_node[i]==2)
+	    	        {
+	    	    		g.drawOval(screenSize.width/2+x_dis-100, 200, 10, 10);
+	    	            g.fillOval(screenSize.width/2+x_dis-100, 200, 10, 10);
+	    	            //g.drawLine(screenSize.width/2+x_dis, 100, screenSize.width/2+x_dis-100, 200);
+	    	        }
+	    	    	if(speaker_node[i]==3)
+	    	        {
+	    	    		g.drawOval(screenSize.width/2+x_dis+100, 200, 10, 10);
+	    	            g.fillOval(screenSize.width/2+x_dis+100, 200, 10, 10);
+	    	        }
+	    	    	if(speaker_node[i]==4)
+	    	        {
+	    	    		g.drawOval(screenSize.width/2+x_dis-100, 300, 10, 10);
+	    	            g.fillOval(screenSize.width/2+x_dis-100, 300, 10, 10);
+	    	        }
+	    	    	if(speaker_node[i]==5)
+	    	        {
+	    	    		g.drawOval(screenSize.width/2+x_dis+100, 300, 10, 10);
+	    	            g.fillOval(screenSize.width/2+x_dis+100, 300, 10, 10);
+	    	        }
+	    	    	if(speaker_node[i]==6)
+	    	        {
+	    	    		g.drawOval(screenSize.width/2+x_dis, 400, 10, 10);
+	    	            g.fillOval(screenSize.width/2+x_dis, 400, 10, 10);
+	    	        }
+	    		}
+	    	}
+	    	if(ed[1][2]||ed[2][1])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis, 100, screenSize.width/2+x_dis-100, 200);
+//	    		row[1][1]=String.valueOf(1);
+//	    	    row1[0][1]=String.valueOf(1);
+	    	}
+	    	if(ed[1][3]||ed[3][1])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis, 100, screenSize.width/2+x_dis+100, 200);
+//	    		row[2][1]=String.valueOf(1);
+//	    	    row2[0][1]=String.valueOf(1);
+	    	}
+	    	if(ed[1][4]||ed[4][1])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis, 100, screenSize.width/2+x_dis-100, 300);
+	    	}
+	    	if(ed[1][5]||ed[5][1])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis, 100, screenSize.width/2+x_dis+100, 300);
+	    	}
+	    	if(ed[1][6]||ed[6][1])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis, 100,screenSize.width/2+x_dis, 400);
+	    	}
+	    	if(ed[2][3]||ed[3][2])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis-100, 200, screenSize.width/2+x_dis+100, 200);
+	    	}
+	    	if(ed[2][4]||ed[4][2])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis-100, 200, screenSize.width/2+x_dis-100, 300);
+	    	}
+	    	if(ed[2][5]||ed[5][2])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis-100, 200, screenSize.width/2+x_dis+100, 300);
+	    	}
+	    	if(ed[2][6]||ed[6][2])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis, 100,screenSize.width/2+x_dis, 400);
+	    	}
+	    	if(ed[3][4]||ed[4][3])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis+100, 200, screenSize.width/2+x_dis-100, 300);
+	    	}
+	    	if(ed[3][5]||ed[5][3])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis+100, 200,screenSize.width/2+x_dis+100, 300);
+	    	}
+	    	if(ed[3][6]||ed[6][3])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis+100, 200,screenSize.width/2+x_dis, 400);
+	    	}
+	    	if(ed[4][5]||ed[5][4])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis-100, 300, screenSize.width/2+x_dis+100, 300);
+	    	}
+	    	if(ed[4][6]||ed[6][4])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis-100, 300, screenSize.width/2+x_dis, 400);
+	    	}
+	    	if(ed[5][6]||ed[6][5])
+	    	{
+	    		g.drawLine(screenSize.width/2+x_dis+100, 300, screenSize.width/2+x_dis, 400);
+	    	}
+	    
+	  }
+	
     BGP_protocol()
     {
+    	   for(int i=1;i<=6;i++)
+			   {
+				   for(int j=1;j<=6;j++)
+				   {
+					  // System.out.println(bgp_data[i][j]);
+					   bgp_data[i][j]=999;
+				   }
+			   }
+    	   for(int i=1;i<=6;i++)
+			{
+			
+				speaker_node[i]=999;
+			}
+    	   
 
        // node = new Integer("0");
        // Initialising objects for 3 panels
@@ -140,7 +275,7 @@ public class BGP_protocol extends JFrame {
     	JSpinner yspin = new JSpinner(y);
     	
     	JButton  next = new JButton("NEXT");   //to draw the value of edges
-    	JButton  reset = new JButton("RESET");
+    	JButton  submit = new JButton("SUBMIT");
     	JLabel as_detail = new JLabel("Select Autonomous System");
     	SpinnerListModel as_list = new SpinnerListModel(as_selector_list);
     	JSpinner as_lists = new JSpinner(as_list);
@@ -174,13 +309,6 @@ public class BGP_protocol extends JFrame {
      	p1.add(spin);
      	p1.add(num_node2);
      	p1.add(spin2);
-     	p1.add(num_node4);
-     	p1.add(as_edge);
-     	p1.add(num_node3);
-     	p1.add(xspin);
-     	p1.add(yspin);
-     	p1.add(next);
-     	p1.add(reset);
      	p1.add(as_detail);
      	p1.add(as_lists);
     	p1.add(node_detail_label);
@@ -189,6 +317,13 @@ public class BGP_protocol extends JFrame {
     	p1.add(node_selectors);
     	p1.add(add);
     	p1.add(next_submit);
+    	p1.add(num_node4);
+     	p1.add(as_edge);
+     	p1.add(num_node3);
+     	p1.add(xspin);
+     	p1.add(yspin);
+     	p1.add(next);
+     	p1.add(submit);
         //p1.add(); constraints);
     
     
@@ -204,6 +339,8 @@ public class BGP_protocol extends JFrame {
         add(p1);  //adding panels to Jframe
     	add(p2);
     	add(p3);
+    	next_submit.setEnabled(false);
+    	submit.setVisible(false);
     next_submit.addActionListener(new ActionListener() {
 		
 		@Override
@@ -211,6 +348,7 @@ public class BGP_protocol extends JFrame {
 			// TODO Auto-generated method stub
 			add.setEnabled(true);
 			add_count=1;
+			node_value=1;
 			int temp_as = (int) as_list.getValue();
         	delete_selected_as(temp_as);
         	int temp_node_per_as = (int) node_per_as.getValue();
@@ -218,12 +356,21 @@ public class BGP_protocol extends JFrame {
         	{delete_selected_node_per_as(temp_value);temp_value--;}
         	as_lists.setValue(null);
         	node_per_as.setValue(null);
-			
-			
+			speaker_node[temp_as]=bgp_data[temp_as][1];
+			for(int i=1;i<=6;i++)
+			{
+				System.out.println(speaker_node[i]);
+			}
+		  repaint();	
 		}
+	
 	});
     	
 	n_num.addChangeListener(new ChangeListener() {
+		
+		
+		
+		
 			
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
@@ -261,7 +408,19 @@ public class BGP_protocol extends JFrame {
 		
 			int temp_selected_node = (int)node_selector.getValue();
 			delete_selected_node(temp_selected_node );
+			int temps_as = (int) as_list.getValue();
+			bgp_data[temps_as][node_value]=temp_selected_node;
+			node_value++;
 			node_selector.setValue(null);
+			/*for(int i=1;i<=6;i++)
+			   {
+				   for(int j=1;j<=6;j++)
+				   {
+					   System.out.println(bgp_data[i][j]);
+				   }
+			   }*/
+			
+			
 			if(add_count<=(int) node_as.getValue()	)
 				{
 			    	
@@ -280,6 +439,7 @@ public class BGP_protocol extends JFrame {
 			        	
 			        /*	delete_selected_node_per_as(1);*/
 			        	add.setEnabled(false);
+			        	next_submit.setEnabled(true);
 			        	
 			        	
 			    	}
@@ -299,6 +459,10 @@ public class BGP_protocol extends JFrame {
  			    	x_value = (Integer) xspin.getValue();
  			        y_value = (Integer) yspin.getValue();
  			       
+ 			        x_value = speaker_node[x_value];
+ 			        y_value = speaker_node[y_value];
+ 			       ed[x_value][y_value]=true;
+ 			      ed[y_value][x_value]=true;
  			        repaint();
  			        if(count==edg)
  			        {
@@ -311,17 +475,22 @@ public class BGP_protocol extends JFrame {
  			    	    spin2.setEnabled(false);
  			    	}
  			        count++;
+ 			        if(count==edg)
+ 			        {
+ 			        	submit.setVisible(true);
+ 			        }
  				}
+ 				
   			}
  		});
-         reset.addActionListener(new ActionListener() {            //function for reset button
+         submit.addActionListener(new ActionListener() {            //function for reset button
  			
  			@Override
  			public void actionPerformed(ActionEvent e) {
  				// TODO Auto-generated method stub
  			   
- 			
- 			     n_num.setValue(0);
+ 			   
+ 			    /* n_num.setValue(0);
  			     v_num.setValue(0);
  			     as_num.setValue(0);
  			     edg=0;
@@ -333,12 +502,13 @@ public class BGP_protocol extends JFrame {
  		    	xspin.setEnabled(true);
  		    	yspin.setEnabled(true);
  		    	spin.setEnabled(true);
- 	    	    spin2.setEnabled(true);
+ 	    	    spin2.setEnabled(true);*/
+ 				p3.setVisible(true);
  			}
  		});
     	//Adding routing tables to JFrame
     	//row[1][1]= String.valueOf(555);
-		String col[] = {"Dest","Hop count","Next Hop"};
+		String col[] = {"NETWORK","PATH"};
 		/*col[0]="cost";*/
 	     JTable tb = new JTable(row,col);
 		jp = new JScrollPane(tb);
