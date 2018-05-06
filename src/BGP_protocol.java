@@ -33,9 +33,12 @@ public class BGP_protocol extends JFrame {
     boolean v5 = false;
     boolean v6 = false;
     int i,j;
+    int check_as;
     int temp_value;
+    int dist[] = new int[10];
     String[][][] dup_row = new String[10][10][10];
     boolean ed[][] = new boolean[10][10];
+    Integer ed_int[][] = new Integer[10][10];
     int x_value;    // First node value of edge
     int y_value;   // Second value of edge
     int node;         // value of no. of nodes
@@ -52,6 +55,7 @@ public class BGP_protocol extends JFrame {
 	int count=1;
 	int rip_x;  //variable to store input in RIP protocol
  	int rip_y;
+ 	int num_edge;
  	JScrollPane jp;
 	boolean visited[] = new boolean[10];
 	Integer[][] ospf_row = new Integer[15][15];
@@ -225,6 +229,8 @@ public class BGP_protocol extends JFrame {
 				   {
 					  // System.out.println(bgp_data[i][j]);
 					   bgp_data[i][j]=999;
+					   ed[i][j]=false;
+					   ed_int[i][j]=0;
 				   }
 			   }
     	   for(int i=1;i<=6;i++)
@@ -454,7 +460,8 @@ public class BGP_protocol extends JFrame {
  			@Override
  			public void actionPerformed(ActionEvent e) {
  				// TODO Auto-generated method stub
- 				if(count<=edg)
+ 				num_edge=(int) as_edge.getValue();
+ 				if(count<=num_edge)
  				{
  			    	x_value = (Integer) xspin.getValue();
  			        y_value = (Integer) yspin.getValue();
@@ -462,9 +469,11 @@ public class BGP_protocol extends JFrame {
  			        x_value = speaker_node[x_value];
  			        y_value = speaker_node[y_value];
  			       ed[x_value][y_value]=true;
- 			      ed[y_value][x_value]=true;
- 			        repaint();
- 			        if(count==edg)
+					ed[y_value][x_value]=true;
+ 			     ed_int[x_value][y_value]=1;
+			      ed_int[y_value][x_value]=1;
+ 			      repaint();
+ 			        if(count==num_edge)
  			        {
  			        	xspin.setEnabled(false);
  	                    yspin.setEnabled(false);
@@ -475,7 +484,7 @@ public class BGP_protocol extends JFrame {
  			    	    spin2.setEnabled(false);
  			    	}
  			        count++;
- 			        if(count==edg)
+ 			        if(count>num_edge)
  			        {
  			        	submit.setVisible(true);
  			        }
@@ -483,45 +492,25 @@ public class BGP_protocol extends JFrame {
  				
   			}
  		});
-         submit.addActionListener(new ActionListener() {            //function for reset button
- 			
- 			@Override
- 			public void actionPerformed(ActionEvent e) {
- 				// TODO Auto-generated method stub
- 			   
- 			   
- 			    /* n_num.setValue(0);
- 			     v_num.setValue(0);
- 			     as_num.setValue(0);
- 			     edg=0;
- 			     xspin.setValue(null);
- 			    yspin.setValue(null);
- 			    next.setText("NEXT");
- 		    	next.setEnabled(true);
- 		    	count=1;	
- 		    	xspin.setEnabled(true);
- 		    	yspin.setEnabled(true);
- 		    	spin.setEnabled(true);
- 	    	    spin2.setEnabled(true);*/
- 				p3.setVisible(true);
- 			}
- 		});
+     
     	//Adding routing tables to JFrame
     	//row[1][1]= String.valueOf(555);
 		String col[] = {"NETWORK","PATH"};
 		/*col[0]="cost";*/
 	     JTable tb = new JTable(row,col);
 		jp = new JScrollPane(tb);
-		tb.setToolTipText("TABLE FOR NODE A");
+		tb.setToolTipText("TABLE FOR SPEAKER NODE 1");
 		jp.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 
 	    JTable tb1 = new JTable(row1,col);
 		JScrollPane jp1 = new JScrollPane(tb1);
+		tb1.setToolTipText("TABLE FOR SPEAKER NODE 2");
 		jp1.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 		//jp.setBounds(400,500,40,50);
 		
 		JTable tb2 = new JTable(row2,col);
 		JScrollPane jp2 = new JScrollPane(tb2);
+		tb2.setToolTipText("TABLE FOR SPEAKER NODE 3");
 		jp2.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 			//jp.setBounds(400,500,40,50);
 		
@@ -529,14 +518,17 @@ public class BGP_protocol extends JFrame {
         add(new Label("hello"));
         JTable tb3 = new JTable(row3,col);
 		JScrollPane jp3 = new JScrollPane(tb3);
+		tb3.setToolTipText("TABLE FOR SPEAKER NODE 4");
 		jp3.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 		
 		JTable tb4 = new JTable(row4,col);
 		JScrollPane jp4 = new JScrollPane(tb4);
+		tb4.setToolTipText("TABLE FOR SPEAKER NODE 5");
 		jp4.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 		
 		JTable tb5 = new JTable(row5,col);
 		JScrollPane jp5 = new JScrollPane(tb5);
+		tb5.setToolTipText("TABLE FOR SPEAKER NODE 6");
 		jp5.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 		p3.add(jp);
 		p3.add(jp1);
@@ -544,12 +536,187 @@ public class BGP_protocol extends JFrame {
 		p3.add(jp3);
 		p3.add(jp4);
 		p3.add(jp5);
+		jp.setVisible(false);
+		jp1.setVisible(false);
+		jp2.setVisible(false);
+		jp3.setVisible(false);
+		jp4.setVisible(false);
+		jp5.setVisible(false);
 		p3.setVisible(false);
 	   
 		//scrollPane.setBorder(BorderFactory.createTitledBorder("HEllo"));
     	
     	setExtendedState(MAXIMIZED_BOTH);  // setting Jframe to full size
     	setVisible(true);
+        submit.addActionListener(new ActionListener() {            //function for reset button
+ 			
+     			@Override
+     			public void actionPerformed(ActionEvent e) {
+     				// TODO Auto-generated method stub
+     			   
+     				for(int i=1;i<=6;i++)
+     			   {
+     				   for(int j=1;j<=6;j++)
+     				   {
+     					   System.out.println(bgp_data[i][j]);
+     					   //bgp_data[i][j]=999;
+     				   }
+     			   }
+     			    /* n_num.setValue(0);
+     			     v_num.setValue(0);
+     			     as_num.setValue(0);
+     			     edg=0;
+     			     xspin.setValue(null);
+     			    yspin.setValue(null);
+     			    next.setText("NEXT");
+     		    	next.setEnabled(true);
+     		    	count=1;	
+     		    	xspin.setEnabled(true);
+     		    	yspin.setEnabled(true);
+     		    	spin.setEnabled(true);
+     	    	    spin2.setEnabled(true);*/
+     				p3.setVisible(true);
+     				row[0][1] = String.valueOf(1); 
+     				
+     				for(int i=1;i<=6;i++)
+     				{
+     					
+     					if(speaker_node[i]!=999)
+     					{
+     						
+     						if(speaker_node[i]==1) {
+     						
+     							for(int j=0;j<6;j++) {
+     								row[j][1]="AS"+String.valueOf(i);
+     							}
+     							jp.setVisible(true);
+     							for(int m=1;m<=6;m++)
+     								{
+     								 if(bgp_data[i][m]!=999)
+     								 {
+     									 check_as=bgp_data[i][m];
+     									 row[check_as-1][1]+="(SAME AS)";
+     								 }
+     								 else
+     								 {
+     									for(i=1;i<=6;i++)
+     	     							{
+     	     								dist[i]=999;
+     	     							}
+     	     			
+     	     							for(i=1;i<=6;i++)
+     	     							{
+     	     								visited[i]=false;
+     	     							}
+     									 int temp_source = i;
+     									dist[temp_source]=0;
+     									 int temp_dest = as_index(m);
+     									 
+     									for(int q=1;q<=(Integer)n_num.getValue();q++)
+     									{
+     								      int min_index = minValue(dist); 
+     								      System.out.println(min_index);	 
+     								      int mm;
+     								      for(mm=1;mm<=6;mm++)
+     								      {
+     								    	
+     								    	if(ospf_row[min_index][mm]==1 && visited[mm]==false)
+     								    	{
+     								    		if(dist[min_index]+ospf_row[min_index][mm]<=dist[mm])
+     								    		{
+     							    			    dist[mm]=dist[min_index]+ospf_row[min_index][mm];
+     								    			neigh[mm]=min_index;
+     				                               
+     								    		}
+     								    	}
+     								    	System.out.println(dist[mm]);
+     								      }
+     									   
+     									}
+     								/*	for(int ed=1;ed<=(Integer)n_num.getValue();ed++)
+     									{
+     										if(ed==ospf_source||neigh[ed]==ospf_source) {neigh[ed]=0;continue;}
+     										else
+     										{neigh[ed]=check_next_route(neigh[ed],neigh);}
+     									}*/
+     								 }
+     								 
+     								 }
+     						  
+     						}
+     						if(speaker_node[i]==2)
+     						{
+     							for(int j=0;j<6;j++) {
+     								row1[j][1]="AS"+String.valueOf(i);
+     							}
+     							jp1.setVisible(true);
+     							for(int m=1;m<=6;m++)
+ 								{
+ 								 if(bgp_data[i][m]!=999) {
+ 									 check_as=bgp_data[i][m];
+ 									 row1[check_as-1][1]+="(SAME AS)";
+ 								 }
+ 								}
+     						}
+     						if(speaker_node[i]==3) {
+     							for(int j=0;j<6;j++) {
+     								row2[j][1]="AS"+String.valueOf(i);
+     							}
+     							jp2.setVisible(true);
+     							for(int m=1;m<=6;m++)
+ 								{
+ 								 if(bgp_data[i][m]!=999) {
+ 									 check_as=bgp_data[i][m];
+ 									 row2[check_as-1][1]+="(SAME AS)";
+ 								 }
+ 								}
+     							}
+     						if(speaker_node[i]==4) {
+     							for(int j=0;j<6;j++) {
+     								row3[j][1]="AS"+String.valueOf(i);
+     							}
+     							jp3.setVisible(true);
+     							for(int m=1;m<=6;m++)
+ 								{
+ 								 if(bgp_data[i][m]!=999) {
+ 									 check_as=bgp_data[i][m];
+ 									 row3[check_as-1][1]+="(SAME AS)";
+ 								 }
+ 								}
+     						}
+     						if(speaker_node[i]==5) {
+     							for(int j=0;j<6;j++) {
+     								row4[j][1]="AS"+String.valueOf(i);
+     							}
+     							jp4.setVisible(true);
+     							for(int m=1;m<=6;m++)
+ 								{
+ 								 if(bgp_data[i][m]!=999) {
+ 									 check_as=bgp_data[i][m];
+ 									 row4[check_as-1][1]+="(SAME AS)";
+ 								 }
+ 								}
+     						}
+     						if(speaker_node[i]==6) {
+     							for(int j=0;j<6;j++) {
+     								row5[j][1]="AS"+String.valueOf(i);
+     							}
+     							jp5.setVisible(true);
+     							for(int m=1;m<=6;m++)
+ 								{
+ 								 if(bgp_data[i][m]!=999) {
+ 									 check_as=bgp_data[i][m];
+ 									 row5[check_as-1][1]+="(SAME AS)";
+ 								 }
+ 								}
+     						}
+     					}
+     				
+     					
+     				}
+     				
+     			}
+     		});
     
     }
 	public  void delete_selected_node(int x)
@@ -612,7 +779,53 @@ public class BGP_protocol extends JFrame {
     {
     	table.getColumnModel().getColumn(col_index).setHeaderValue(col_name);
     }
-
+    public int as_index(int x)
+    {
+    	for(int i=1;i<=6;i++)
+    	{
+    		if(speaker_node[i]==x)
+    		{
+    			break;
+    		}
+    	}
+    	return i;
+    }
+    public int minValue(int dist[])
+    {
+    	
+    	 int minVal = 999;
+    	 int temp=0;
+    	//index_node = ospf_source;
+    	//if(visited[ospf_source]==true) {minVal=999;}
+    	for(i=1;i<=6;i++)
+    	{
+    		//System.out.println("dist" + visited[i]);
+    		if(minVal>dist[i]&&visited[i]==false)
+    			
+    			
+    		{
+    			//System.out.println("hello");
+    			minVal = dist[i];
+    			temp = i;
+    		}
+    		
+    	}
+    	//System.out.println(index_node);	
+    	
+    	visited[temp]=true;
+    	
+    	return temp;
+    }
+    public int check_next_route(int x,int neigh[]) {
+    	if(ospf_row[ospf_source][x]!=1)
+    	{
+    		return check_next_route(neigh[x],neigh);
+    	}
+    	else
+		{
+    		return x;
+		}
+    }
      
     public static void main(String[] args) {
 		new BGP_protocol();
