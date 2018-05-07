@@ -24,7 +24,6 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.util.Arrays;
 public class BGP_protocol extends JFrame {
     boolean v1 = false;          //to set the visibility for nodes on panel 2
     boolean v2 = false;
@@ -33,12 +32,13 @@ public class BGP_protocol extends JFrame {
     boolean v5 = false;
     boolean v6 = false;
     int i,j;
+    int NO_PARENT = -1;
     int check_as;
     int temp_value;
     int dist[] = new int[10];
     String[][][] dup_row = new String[10][10][10];
     boolean ed[][] = new boolean[10][10];
-    Integer ed_int[][] = new Integer[10][10];
+    int ed_int[][] = new int[10][10];
     int x_value;    // First node value of edge
     int y_value;   // Second value of edge
     int node;         // value of no. of nodes
@@ -233,6 +233,7 @@ public class BGP_protocol extends JFrame {
 					   ed_int[i][j]=0;
 				   }
 			   }
+    	
     	   for(int i=1;i<=6;i++)
 			{
 			
@@ -365,7 +366,7 @@ public class BGP_protocol extends JFrame {
 			speaker_node[temp_as]=bgp_data[temp_as][1];
 			for(int i=1;i<=6;i++)
 			{
-				System.out.println(speaker_node[i]);
+				//System.out.println(speaker_node[i]);
 			}
 		  repaint();	
 		}
@@ -558,7 +559,7 @@ public class BGP_protocol extends JFrame {
      			   {
      				   for(int j=1;j<=6;j++)
      				   {
-     					   System.out.println(bgp_data[i][j]);
+     					 //  System.out.println(bgp_data[i][j]);
      					   //bgp_data[i][j]=999;
      				   }
      			   }
@@ -599,46 +600,13 @@ public class BGP_protocol extends JFrame {
      								 }
      								 else
      								 {
-     									for(i=1;i<=6;i++)
-     	     							{
-     	     								dist[i]=999;
-     	     							}
-     	     			
-     	     							for(i=1;i<=6;i++)
-     	     							{
-     	     								visited[i]=false;
-     	     							}
+     									
      									 int temp_source = i;
-     									dist[temp_source]=0;
      									 int temp_dest = as_index(m);
-     									 
-     									for(int q=1;q<=(Integer)n_num.getValue();q++)
-     									{
-     								      int min_index = minValue(dist); 
-     								      System.out.println(min_index);	 
-     								      int mm;
-     								      for(mm=1;mm<=6;mm++)
-     								      {
-     								    	
-     								    	if(ospf_row[min_index][mm]==1 && visited[mm]==false)
-     								    	{
-     								    		if(dist[min_index]+ospf_row[min_index][mm]<=dist[mm])
-     								    		{
-     							    			    dist[mm]=dist[min_index]+ospf_row[min_index][mm];
-     								    			neigh[mm]=min_index;
-     				                               
-     								    		}
-     								    	}
-     								    	System.out.println(dist[mm]);
-     								      }
-     									   
-     									}
-     								/*	for(int ed=1;ed<=(Integer)n_num.getValue();ed++)
-     									{
-     										if(ed==ospf_source||neigh[ed]==ospf_source) {neigh[ed]=0;continue;}
-     										else
-     										{neigh[ed]=check_next_route(neigh[ed],neigh);}
-     									}*/
+     									System.out.println(temp_source + " "+ temp_dest);
+     									 //dijsktra(ed_int,temp_source,temp_dest);
+     									
+     									
      								 }
      								 
      								 }
@@ -781,51 +749,76 @@ public class BGP_protocol extends JFrame {
     }
     public int as_index(int x)
     {
+    	int temp=0;
     	for(int i=1;i<=6;i++)
     	{
-    		if(speaker_node[i]==x)
+    		for(int j=1;j<=6;j++)
+    		if(bgp_data[i][j]==x)
     		{
-    			break;
+    			temp=i;
     		}
     	}
-    	return i;
-    }
-    public int minValue(int dist[])
-    {
-    	
-    	 int minVal = 999;
-    	 int temp=0;
-    	//index_node = ospf_source;
-    	//if(visited[ospf_source]==true) {minVal=999;}
-    	for(i=1;i<=6;i++)
-    	{
-    		//System.out.println("dist" + visited[i]);
-    		if(minVal>dist[i]&&visited[i]==false)
-    			
-    			
-    		{
-    			//System.out.println("hello");
-    			minVal = dist[i];
-    			temp = i;
-    		}
-    		
-    	}
-    	//System.out.println(index_node);	
-    	
-    	visited[temp]=true;
-    	
     	return temp;
     }
-    public int check_next_route(int x,int neigh[]) {
-    	if(ospf_row[ospf_source][x]!=1)
-    	{
-    		return check_next_route(neigh[x],neigh);
-    	}
-    	else
-		{
-    		return x;
-		}
+  public  void dijsktra(int cost[][],int source,int target)
+    {
+	    int N = 7;
+	    int IN = 99;
+        int dist[] = new int[N];
+        int prev[]= new int[N];
+        int selected[]=new int[N];
+        int i,m,min,start,d,j;
+        int path[] = new int[N];
+        selected[0]=0;
+        for(i=1;i< N;i++)
+        {
+            dist[i] = IN;
+            prev[i] = -1;
+            selected[i]=0;
+        }
+        start = source;
+        selected[start]=1;
+        dist[start] = 0;
+        while(selected[target] ==0)
+        {
+            min = IN;
+            m = 0;
+            for(i=1;i< N;i++)
+            {
+                d = dist[start] +cost[start][i];
+                if(d< dist[i]&&selected[i]==0)
+                {
+                    dist[i] = d;
+                    prev[i] = start;
+                }
+                if(min>dist[i] && selected[i]==0)
+                {
+                    min = dist[i];
+                    m = i;
+                }
+            }
+            start = m;
+            selected[start] = 1;
+        }
+        start = target;
+        j = 0;
+        while(start != -1)
+        {
+            path[j++] = start;
+            start = prev[start];
+        }
+
+        for(int l=1;l<j;l++)
+        {
+            //printf("%d ",path[l]);
+            System.out.println(path[l]+" ");
+        }
+
+
     }
+
+    
+
      
     public static void main(String[] args) {
 		new BGP_protocol();
