@@ -1,11 +1,32 @@
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Label;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 public class MainActivity extends JFrame {
     boolean v1 = false;          //to set the visibility for nodes on panel 2
     boolean v2 = false;
@@ -64,6 +85,7 @@ public class MainActivity extends JFrame {
 	JTextField input2 = new JTextField();
 	JLabel input1_label = new JLabel("TARGET TABLE");
 	JLabel input2_label = new JLabel("REFRENCE TABLE");
+	
 	JButton cal = new JButton("CALCULATE");
 	JButton fin  = new JButton ("FINAL");
 	JButton close = new JButton ("EXIT");
@@ -76,38 +98,80 @@ public class MainActivity extends JFrame {
     	g.setColor(Color.GREEN);
     	if(v1)
     	{
-    		g.drawOval(screenSize.width/2+x_dis, 100, 10, 10);
-            g.fillOval(screenSize.width/2+x_dis, 100, 10, 10);
+    		g.drawOval(screenSize.width/2+x_dis, 100, 20, 20);
+            g.fillOval(screenSize.width/2+x_dis, 100, 20, 20);
+            //p2.add(new JLabel("1")).setBounds(screenSize.width/2+20, 100+20, 10, 10);
+            String text = "1";
+            FontMetrics fm = g.getFontMetrics();
+            double textWidth = fm.getStringBounds(text, g).getWidth();
+            g.setColor(Color.BLACK);
+            g.drawString(text, (int) (screenSize.width/2+x_dis+10 - textWidth/2),
+                               (int) (110 + fm.getMaxAscent() / 2));
            // g.drawOval(screenSize.width/2+x_dis+50, 100, 20, 20);
 //            g.drawChars('A',screenSize.width/2+x_dis+20, 100, 10, 10);
            // g.drawChars(arg0, arg1, arg2, arg3, arg4);
     	}
     	if(v2)
         {
-    		g.drawOval(screenSize.width/2+x_dis-100, 200, 10, 10);
-            g.fillOval(screenSize.width/2+x_dis-100, 200, 10, 10);
+    		g.setColor(Color.GREEN);
+    		g.drawOval(screenSize.width/2+x_dis-100, 200, 20, 20);
+            g.fillOval(screenSize.width/2+x_dis-100, 200, 20, 20);
+            String text = "2";
+            FontMetrics fm = g.getFontMetrics();
+            double textWidth = fm.getStringBounds(text, g).getWidth();
+            g.setColor(Color.BLACK);
+            g.drawString(text, (int) (screenSize.width/2+x_dis-100+10 - textWidth/2),
+                               (int) (210 + fm.getMaxAscent() / 2));
             //g.drawLine(screenSize.width/2+x_dis, 100, screenSize.width/2+x_dis-100, 200);
         }
     	if(v3)
         {
-    		g.drawOval(screenSize.width/2+x_dis+100, 200, 10, 10);
-            g.fillOval(screenSize.width/2+x_dis+100, 200, 10, 10);
+    		g.setColor(Color.GREEN);
+    		g.drawOval(screenSize.width/2+x_dis+100, 200, 20, 20);
+            g.fillOval(screenSize.width/2+x_dis+100, 200, 20, 20);
+            String text = "3";
+            FontMetrics fm = g.getFontMetrics();
+            double textWidth = fm.getStringBounds(text, g).getWidth();
+            g.setColor(Color.BLACK);
+            g.drawString(text, (int) (screenSize.width/2+x_dis+100+10 - textWidth/2),
+                               (int) (210 + fm.getMaxAscent() / 2));
         }
     	if(v4)
         {
-    		g.drawOval(screenSize.width/2+x_dis-100, 300, 10, 10);
-            g.fillOval(screenSize.width/2+x_dis-100, 300, 10, 10);
+    		g.setColor(Color.GREEN);
+    		g.drawOval(screenSize.width/2+x_dis-100, 300, 20, 20);
+            g.fillOval(screenSize.width/2+x_dis-100, 300, 20, 20);
+            String text = "4";
+            FontMetrics fm = g.getFontMetrics();
+            double textWidth = fm.getStringBounds(text, g).getWidth();
+            g.setColor(Color.BLACK);
+            g.drawString(text, (int) (screenSize.width/2+x_dis-100+10 - textWidth/2),
+                               (int) (310 + fm.getMaxAscent() / 2));
         }
     	if(v5)
         {
-    		g.drawOval(screenSize.width/2+x_dis+100, 300, 10, 10);
-            g.fillOval(screenSize.width/2+x_dis+100, 300, 10, 10);
+    		g.setColor(Color.GREEN);
+    		g.drawOval(screenSize.width/2+x_dis+100, 300, 20, 20);
+            g.fillOval(screenSize.width/2+x_dis+100, 300, 20, 20);
+            String text = "5";
+            FontMetrics fm = g.getFontMetrics();
+            double textWidth = fm.getStringBounds(text, g).getWidth();
+            g.setColor(Color.BLACK);
+            g.drawString(text, (int) (screenSize.width/2+x_dis+100+10 - textWidth/2),
+                               (int) (310 + fm.getMaxAscent() / 2));
         }
     	if(v6)
-        {
-    		g.drawOval(screenSize.width/2+x_dis, 400, 10, 10);
-            g.fillOval(screenSize.width/2+x_dis, 400, 10, 10);
+        {   g.setColor(Color.GREEN);
+    		g.drawOval(screenSize.width/2+x_dis, 400, 20, 20);
+            g.fillOval(screenSize.width/2+x_dis, 400, 20, 20);
+            String text = "6";
+            FontMetrics fm = g.getFontMetrics();
+            double textWidth = fm.getStringBounds(text, g).getWidth();
+            g.setColor(Color.BLACK);
+            g.drawString(text, (int) (screenSize.width/2+x_dis+10 - textWidth/2),
+                               (int) (410 + fm.getMaxAscent() / 2));
         }
+    	 g.setColor(Color.GREEN);
     	if(ed[1][2]||ed[2][1])
     	{
     		g.drawLine(screenSize.width/2+x_dis, 100, screenSize.width/2+x_dis-100, 200);
@@ -197,6 +261,7 @@ public class MainActivity extends JFrame {
     	JMenuItem rip = new JMenuItem("RIP");
     	JMenuItem bgp = new JMenuItem("BGP");
     	JMenuItem ospf = new JMenuItem("OSPF");
+    	JMenuItem protocol_cmp = new JMenuItem("PROTOCOL COMPARISON");
     	
     	JPanel p1 = new JPanel();
     	JLabel num_node = new JLabel("ENTER THE NUMBER OF NODES");//Creating interface for taking input in panel(p1)
@@ -502,7 +567,7 @@ public class MainActivity extends JFrame {
     	p1.add(next,gbc);
     	p1.add(reset,gbc);
     	
-    	protocol.add(rip);protocol.add(bgp);protocol.add(ospf); // adding menuitems to protocol
+    	protocol.add(rip);protocol.add(bgp);protocol.add(ospf);protocol.add(protocol_cmp); // adding menuitems to protocol
     	mb.add(file); 
      	file.addSeparator();
      	mb.add(protocol);
@@ -530,15 +595,22 @@ public class MainActivity extends JFrame {
 		/*col[0]="cost";*/
 	     JTable tb = new JTable(row,col);
 		jp = new JScrollPane(tb);
-		tb.setToolTipText("TABLE FOR NODE A");
+		tb.setToolTipText("TABLE FOR NODE 1");
+		
+		
+		
+		
+		
 		jp.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 
 	    JTable tb1 = new JTable(row1,col);
-		JScrollPane jp1 = new JScrollPane(tb1);
+	    tb1.setToolTipText("TABLE FOR NODE 2");
+	    JScrollPane jp1 = new JScrollPane(tb1);
 		jp1.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 		//jp.setBounds(400,500,40,50);
 		
 		JTable tb2 = new JTable(row2,col);
+		tb2.setToolTipText("TABLE FOR NODE 3");
 		JScrollPane jp2 = new JScrollPane(tb2);
 		jp2.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 			//jp.setBounds(400,500,40,50);
@@ -546,14 +618,17 @@ public class MainActivity extends JFrame {
 		//p3.add(jp2);
         add(new Label("hello"));
         JTable tb3 = new JTable(row3,col);
-		JScrollPane jp3 = new JScrollPane(tb3);
+        tb3.setToolTipText("TABLE FOR NODE 4");
+        JScrollPane jp3 = new JScrollPane(tb3);
 		jp3.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 		
 		JTable tb4 = new JTable(row4,col);
+		tb4.setToolTipText("TABLE FOR NODE 5");
 		JScrollPane jp4 = new JScrollPane(tb4);
 		jp4.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 		
 		JTable tb5 = new JTable(row5,col);
+		tb5.setToolTipText("TABLE FOR NODE 6");
 		JScrollPane jp5 = new JScrollPane(tb5);
 		jp5.setPreferredSize(new Dimension(screenSize.width/7+25,screenSize.height/2-100));
 		p3.add(jp);
@@ -575,16 +650,10 @@ public class MainActivity extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 			    
-			/*	String row[][] = {{"1","a","A"},{"2","b","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"},{"3","c","B"}};
-				String col[] = {"num","small","cap"};
-			     JTable tb = new JTable(row,col);
-				tb.setBounds(5,screenSize.height/2-100,screenSize.width/5,screenSize.height/2-100);
-				JScrollPane jp = new JScrollPane(tb);
-				p3.add(jp);*/
-				
+			
 							
 			    
-			    
+				
 			    // Adding the components for RIP PROTOCOL FRAME
 			    JFrame rip_cont = new JFrame("RIP PROTOCOL SIMULATOR");
 			    //rip_cont.add(jp_a);
@@ -606,6 +675,10 @@ public class MainActivity extends JFrame {
                         int val;
 						if(rip_x==1)
 						{
+							if(rip_y==1)
+							{
+								tb.getModel().setValueAt("", rip_y-1,1 );		
+							}
 					
 							if(rip_y==2) 
 							{
@@ -668,6 +741,7 @@ public class MainActivity extends JFrame {
 										//System.out.println(row[i][1]);
 										tb.getModel().setValueAt(row[i][1], i,1 );
 										tb.getModel().setValueAt(String.valueOf(rip_y), i, 2);
+										
 									}
 									}
 								}
@@ -742,6 +816,10 @@ public class MainActivity extends JFrame {
 									}
 								}
 								
+							}
+							if(rip_y==2)
+							{
+								tb1.getModel().setValueAt("", rip_y-1,1 );		
 							}
 							if(rip_y==3) 
 							{
@@ -880,6 +958,10 @@ public class MainActivity extends JFrame {
 								}
 								
 							}
+							if(rip_y==3)
+							{
+								tb2.getModel().setValueAt("", rip_y-1,1 );		
+							}
 							if(rip_y==4) 
 							{
 								for(i=0;i<5;i++)
@@ -1015,6 +1097,10 @@ public class MainActivity extends JFrame {
 									}
 								}
 								
+							}
+							if(rip_y==4)
+							{
+								tb3.getModel().setValueAt("", rip_y-1,1 );		
 							}
 							if(rip_y==5) 
 							{
@@ -1157,6 +1243,10 @@ public class MainActivity extends JFrame {
 								}
 								
 							}
+							if(rip_y==5)
+							{
+								tb4.getModel().setValueAt("", rip_y-1,1 );		
+							}
 							if(rip_y==6) 
 							{
 								for(i=0;i<5;i++)
@@ -1293,8 +1383,14 @@ public class MainActivity extends JFrame {
 								}
 								
 							}
+							if(rip_y==6)
+							{
+								tb5.getModel().setValueAt("", rip_y-1,1 );		
+							}
 						}
+						
 					}
+					
 				});
 				fin.setBounds(100, 250, 150, 30);
 				fin.addActionListener(new ActionListener() {          //Adding function to calculate the final RIP of the routing table
@@ -1794,7 +1890,8 @@ public class MainActivity extends JFrame {
 								tb.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
 								tb.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
 							}
-								
+							tb.getModel().setValueAt(String.valueOf("-"),ospf_source-1, 1);
+							tb.getModel().setValueAt(String.valueOf("-"), ospf_source-1, 2);
 							jp.setVisible(true);
 					}
 					else if(ospf_source==2)
@@ -1804,6 +1901,8 @@ public class MainActivity extends JFrame {
 							tb1.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
 							tb1.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
 						}
+						tb1.getModel().setValueAt(String.valueOf("-"),ospf_source-1, 1);
+						tb1.getModel().setValueAt(String.valueOf("-"), ospf_source-1, 2);
 						jp1.setVisible(true);
 					}
 					else if(ospf_source==3)
@@ -1813,6 +1912,8 @@ public class MainActivity extends JFrame {
 							tb2.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
 							tb2.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
 						}
+						tb2.getModel().setValueAt(String.valueOf("-"),ospf_source-1, 1);
+						tb2.getModel().setValueAt(String.valueOf("-"), ospf_source-1, 2);
 						jp2.setVisible(true);
 					}
 					else if(ospf_source==4)
@@ -1822,6 +1923,8 @@ public class MainActivity extends JFrame {
 							tb3.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
 							tb3.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
 						}
+						tb3.getModel().setValueAt(String.valueOf("-"),ospf_source-1, 1);
+						tb3.getModel().setValueAt(String.valueOf("-"), ospf_source-1, 2);
 						jp3.setVisible(true);
 					}
 					else if(ospf_source==5)
@@ -1831,6 +1934,8 @@ public class MainActivity extends JFrame {
 							tb4.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
 							tb4.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
 						}
+						tb4.getModel().setValueAt(String.valueOf("-"),ospf_source-1, 1);
+						tb4.getModel().setValueAt(String.valueOf("-"), ospf_source-1, 2);
 						jp4.setVisible(true);
 					}
 					else if(ospf_source==6)
@@ -1840,6 +1945,8 @@ public class MainActivity extends JFrame {
 							tb5.getModel().setValueAt(String.valueOf(dist[i+1]), i, 1);
 							tb5.getModel().setValueAt(String.valueOf(neigh[i+1]), i, 2);
 						}
+						tb5.getModel().setValueAt(String.valueOf("-"),ospf_source-1, 1);
+						tb5.getModel().setValueAt(String.valueOf("-"), ospf_source-1, 2);
 						jp5.setVisible(true);
 					}
 					else
@@ -1851,11 +1958,33 @@ public class MainActivity extends JFrame {
 						}
 					    input1_Ospf.setText("");
 					}
-					}});		
+					}});
+		  
 				}
 			});
 			
-
+       protocol_cmp.addActionListener(new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+			repaint();
+			JFrame protocol_cont = new JFrame();
+			protocol_cont.setSize(500,100);
+			protocol_cont.setVisible(true);
+			int v =(int) n_num.getValue();
+			int e =(int) v_num.getValue();
+			double ospf_cal = (double) (e+(v * Math.log(v)));
+			double rip_cal = (double)(v);
+			double result = ospf_cal/rip_cal;
+			 result = BigDecimal.valueOf(result)
+				    .setScale(3, RoundingMode.HALF_UP)
+				    .doubleValue();
+			protocol_cont.add(new JLabel("Execution of OSPF for this case is "+result+" times faster than RIP"));
+			
+		}
+	});
     	
     	bgp.addActionListener(new ActionListener() {  //Adding new window for gbp protocol
 			

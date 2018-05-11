@@ -4,6 +4,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Label;
 import java.awt.Toolkit;
@@ -128,40 +129,79 @@ public class BGP_protocol extends JFrame {
 	    		{
 	    			if(speaker_node[i]==1)
 	    	    	{
-	    	    		g.drawOval(screenSize.width/2+x_dis, 100, 10, 10);
-	    	            g.fillOval(screenSize.width/2+x_dis, 100, 10, 10);
+	    				g.drawOval(screenSize.width/2+x_dis, 100, 20, 20);
+	    	            g.fillOval(screenSize.width/2+x_dis, 100, 20, 20);
+	    	            //p2.add(new JLabel("1")).setBounds(screenSize.width/2+20, 100+20, 10, 10);
+	    	            String text = "1";
+	    	            FontMetrics fm = g.getFontMetrics();
+	    	            double textWidth = fm.getStringBounds(text, g).getWidth();
+	    	            g.setColor(Color.BLACK);
+	    	            g.drawString(text, (int) (screenSize.width/2+x_dis+10 - textWidth/2),
+	    	                               (int) (110 + fm.getMaxAscent() / 2));
 	    	           // g.drawOval(screenSize.width/2+x_dis+50, 100, 20, 20);
 //	    	            g.drawChars('A',screenSize.width/2+x_dis+20, 100, 10, 10);
 	    	           // g.drawChars(arg0, arg1, arg2, arg3, arg4);
 	    	    	}
 	    	    	if(speaker_node[i]==2)
 	    	        {
-	    	    		g.drawOval(screenSize.width/2+x_dis-100, 200, 10, 10);
-	    	            g.fillOval(screenSize.width/2+x_dis-100, 200, 10, 10);
-	    	            //g.drawLine(screenSize.width/2+x_dis, 100, screenSize.width/2+x_dis-100, 200);
+	    	    		g.drawOval(screenSize.width/2+x_dis-100, 200, 20, 20);
+	    	            g.fillOval(screenSize.width/2+x_dis-100, 200, 20, 20);
+	    	            String text = "2";
+	    	            FontMetrics fm = g.getFontMetrics();
+	    	            double textWidth = fm.getStringBounds(text, g).getWidth();
+	    	            g.setColor(Color.BLACK);
+	    	            g.drawString(text, (int) (screenSize.width/2+x_dis-100+10 - textWidth/2),
+	    	                               (int) (210 + fm.getMaxAscent() / 2));
 	    	        }
 	    	    	if(speaker_node[i]==3)
 	    	        {
-	    	    		g.drawOval(screenSize.width/2+x_dis+100, 200, 10, 10);
-	    	            g.fillOval(screenSize.width/2+x_dis+100, 200, 10, 10);
+	    	    		
+	    	    		g.drawOval(screenSize.width/2+x_dis+100, 200, 20, 20);
+	    	            g.fillOval(screenSize.width/2+x_dis+100, 200, 20, 20);
+	    	            String text = "3";
+	    	            FontMetrics fm = g.getFontMetrics();
+	    	            double textWidth = fm.getStringBounds(text, g).getWidth();
+	    	            g.setColor(Color.BLACK);
+	    	            g.drawString(text, (int) (screenSize.width/2+x_dis+100+10 - textWidth/2),
+	    	                               (int) (210 + fm.getMaxAscent() / 2));
 	    	        }
 	    	    	if(speaker_node[i]==4)
 	    	        {
-	    	    		g.drawOval(screenSize.width/2+x_dis-100, 300, 10, 10);
-	    	            g.fillOval(screenSize.width/2+x_dis-100, 300, 10, 10);
+	    	    		g.drawOval(screenSize.width/2+x_dis-100, 300, 20, 20);
+	    	            g.fillOval(screenSize.width/2+x_dis-100, 300, 20, 20);
+	    	            String text = "4";
+	    	            FontMetrics fm = g.getFontMetrics();
+	    	            double textWidth = fm.getStringBounds(text, g).getWidth();
+	    	            g.setColor(Color.BLACK);
+	    	            g.drawString(text, (int) (screenSize.width/2+x_dis-100+10 - textWidth/2),
+	    	                               (int) (310 + fm.getMaxAscent() / 2));
 	    	        }
 	    	    	if(speaker_node[i]==5)
 	    	        {
-	    	    		g.drawOval(screenSize.width/2+x_dis+100, 300, 10, 10);
-	    	            g.fillOval(screenSize.width/2+x_dis+100, 300, 10, 10);
+	    	    		
+	    	    		g.drawOval(screenSize.width/2+x_dis+100, 300, 20, 20);
+	    	            g.fillOval(screenSize.width/2+x_dis+100, 300, 20, 20);
+	    	            String text = "5";
+	    	            FontMetrics fm = g.getFontMetrics();
+	    	            double textWidth = fm.getStringBounds(text, g).getWidth();
+	    	            g.setColor(Color.BLACK);
+	    	            g.drawString(text, (int) (screenSize.width/2+x_dis+100+10 - textWidth/2),
+	    	                               (int) (310 + fm.getMaxAscent() / 2));
 	    	        }
 	    	    	if(speaker_node[i]==6)
 	    	        {
-	    	    		g.drawOval(screenSize.width/2+x_dis, 400, 10, 10);
-	    	            g.fillOval(screenSize.width/2+x_dis, 400, 10, 10);
+	    	     		g.drawOval(screenSize.width/2+x_dis, 400, 20, 20);
+	    	             g.fillOval(screenSize.width/2+x_dis, 400, 20, 20);
+	    	             String text = "6";
+	    	             FontMetrics fm = g.getFontMetrics();
+	    	             double textWidth = fm.getStringBounds(text, g).getWidth();
+	    	             g.setColor(Color.BLACK);
+	    	             g.drawString(text, (int) (screenSize.width/2+x_dis+10 - textWidth/2),
+	    	                                (int) (410 + fm.getMaxAscent() / 2));
 	    	        }
 	    		}
 	    	}
+	    	g.setColor(Color.YELLOW);
 	    	if(ed[1][2]||ed[2][1])
 	    	{
 	    		g.drawLine(screenSize.width/2+x_dis, 100, screenSize.width/2+x_dis-100, 200);
