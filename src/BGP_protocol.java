@@ -14,6 +14,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -34,8 +37,11 @@ public class BGP_protocol extends JFrame {
     int i,j;
     int NO_PARENT = -1;
     int check_as;
+    
     int temp_value;
     int dist[] = new int[10];
+    int as_path[] = new int[10];
+    int as_path_index;
     String[][][] dup_row = new String[10][10][10];
     boolean ed[][] = new boolean[10][10];
     int ed_int[][] = new int[10][10];
@@ -79,7 +85,9 @@ public class BGP_protocol extends JFrame {
  			row[i][j]=
  		}
  	}*/
-	String row[][] = {{"1",""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};           //routing table values
+      SpinnerModel n_num = new SpinnerNumberModel(0, 0, 6, 1);
+  	SpinnerModel as_num = new SpinnerNumberModel(0, 0, 6, 1);
+      String row[][] = {{"1",""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};           //routing table values
 	String row1[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
 	String row2[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
 	String row3[][] = {{"1", ""},{"2", ""},{"3", ""},{"4", ""},{"5", ""},{"6", ""}};
@@ -270,13 +278,20 @@ public class BGP_protocol extends JFrame {
     	JLabel num_node2 = new JLabel("ENTER THE NUMBER OF AUTONOMOUS SYSTEM");
     	JLabel num_node4 = new JLabel("ENTER THE NUMBER OF EDGES BETWEEN AUTONOMOUS SYSTEM");
     	JLabel num_node3 = new JLabel("ENTER THE VALUE OF EDGES BETWEEN AUTONOMOUS SYSTEM");
-    	SpinnerModel n_num = new SpinnerNumberModel(0, 0, 6, 1);
-    	SpinnerModel as_num = new SpinnerNumberModel(0, 0, 6, 1);
+    	
     	SpinnerModel v_num = new SpinnerNumberModel(0, 0, 12, 1);
     	SpinnerListModel x = new SpinnerListModel(as_node_list);
     	SpinnerListModel y = new SpinnerListModel(as_node_list);
     	JSpinner spin = new JSpinner(n_num);
     	JSpinner spin2 = new JSpinner(as_num);
+    	JMenuBar mb = new JMenuBar();
+    	JMenuItem as1 = new JMenuItem("AS1 - BLUE ");
+    	JMenuItem as2 = new JMenuItem("AS2 - RED ");
+    	JMenuItem as3 = new JMenuItem("AS3 - PINK ");
+    	JMenuItem as4 = new JMenuItem("AS4 - CYAN ");
+    	JMenuItem as5 = new JMenuItem("AS5 - MAGNETA ");
+    	JMenuItem as6 = new JMenuItem("AS6 - YELLOW ");
+    	JMenu help  = new JMenu("AS COLOR REFERNCE");
     	JSpinner as_edge = new JSpinner(v_num);
     	JSpinner xspin = new JSpinner(x);
     	JSpinner yspin = new JSpinner(y);
@@ -303,7 +318,14 @@ public class BGP_protocol extends JFrame {
     	((JSpinner.DefaultEditor)node_per_as.getEditor()).getTextField().setEditable(false);
     	((JSpinner.DefaultEditor)node_selectors.getEditor()).getTextField().setEditable(false);
         
-       
+    	help.add(as1);
+    	help.add(as2);
+    	help.add(as3);
+    	help.add(as4);
+    	help.add(as5);
+    	help.add(as6);
+    	mb.add(help);
+    	setJMenuBar(mb);
    /*     p1.add(num_node);
         p1.add(spin);
         p1.add(num_as);
@@ -348,6 +370,7 @@ public class BGP_protocol extends JFrame {
     	add(p3);
     	next_submit.setEnabled(false);
     	submit.setVisible(false);
+    	
     next_submit.addActionListener(new ActionListener() {
 		
 		@Override
@@ -466,13 +489,13 @@ public class BGP_protocol extends JFrame {
  				{
  			    	x_value = (Integer) xspin.getValue();
  			        y_value = (Integer) yspin.getValue();
- 			       
+ 			       ed_int[x_value][y_value]=1;
+ 			      ed_int[y_value][x_value]=1;   
  			        x_value = speaker_node[x_value];
  			        y_value = speaker_node[y_value];
  			       ed[x_value][y_value]=true;
 					ed[y_value][x_value]=true;
- 			     ed_int[x_value][y_value]=1;
-			      ed_int[y_value][x_value]=1;
+ 			    
  			      repaint();
  			        if(count==num_edge)
  			        {
@@ -579,9 +602,12 @@ public class BGP_protocol extends JFrame {
      				p3.setVisible(true);
      				row[0][1] = String.valueOf(1); 
      				
-     				for(int i=1;i<=6;i++)
+     				for(int i=1;i<=(int)as_num.getValue();i++)
      				{
-     					
+     					/*for(int j=1;j<=(int)as_num.getValue();j++)
+     					{
+     						System.out.print(ed_int[i][j]);
+     					}*/
      					if(speaker_node[i]!=999)
      					{
      						
@@ -591,93 +617,348 @@ public class BGP_protocol extends JFrame {
      								row[j][1]="AS"+String.valueOf(i);
      							}
      							jp.setVisible(true);
-     							for(int m=1;m<=6;m++)
+     							for(int m=1;m<=(int)n_num.getValue();m++)
      								{
      								 if(bgp_data[i][m]!=999)
      								 {
+     									 
+     									 
      									 check_as=bgp_data[i][m];
      									 row[check_as-1][1]+="(SAME AS)";
      								 }
-     								 else
+     								 
+     								 int flag=0;
+     								 for(int n=1;n<=(int)n_num.getValue();n++)
+     								 {
+     									 if(m==bgp_data[i][n])
      								 {
      									
+     									 //dijsktra(ed_int,temp_source,temp_dest);
+                                         flag=1;     								
+     									
+     								 }
+     									 
+     								 }
+     							 if(flag==0)
+     								 {
+     								   
      									 int temp_source = i;
      									 int temp_dest = as_index(m);
-     									System.out.println(temp_source + " "+ temp_dest);
-     									 //dijsktra(ed_int,temp_source,temp_dest);
-     									
-     									
+     									 //System.out.println(temp_dest);
+     									 //System.out.println(temp_dest);
+     									dikstra(temp_source);
+     									int temp_trav=temp_dest;
+     									as_path_index=0;
+     									while(temp_trav!=temp_source)
+     									{
+     										//System.out.println(neigh[temp_trav]);
+     										as_path_index++;
+     										as_path[as_path_index]=neigh[temp_trav];
+     									    
+     									temp_trav=neigh[temp_trav];
+     									}
+     									for(int qw=as_path_index-1;qw>=1;qw--)
+     									{
+     										//System.out.println( as_path[qw]);
+     										row[m-1][1]+="-AS"+String.valueOf( as_path[qw]);
+     									}
+     									row[m-1][1]+="-AS"+String.valueOf(temp_dest);
+     								
      								 }
      								 
      								 }
      						  
      						}
-     						if(speaker_node[i]==2)
-     						{
+     						if(speaker_node[i]==2) {
+         						
      							for(int j=0;j<6;j++) {
      								row1[j][1]="AS"+String.valueOf(i);
      							}
      							jp1.setVisible(true);
-     							for(int m=1;m<=6;m++)
- 								{
- 								 if(bgp_data[i][m]!=999) {
- 									 check_as=bgp_data[i][m];
- 									 row1[check_as-1][1]+="(SAME AS)";
- 								 }
- 								}
+     							for(int m=1;m<=(int)n_num.getValue();m++)
+     								{
+     								 if(bgp_data[i][m]!=999)
+     								 {
+     									 
+     									 
+     									 check_as=bgp_data[i][m];
+     									 row1[check_as-1][1]+="(SAME AS)";
+     								 }
+     								 
+     								 int flag=0;
+     								 for(int n=1;n<=(int)n_num.getValue();n++)
+     								 {
+     									 if(m==bgp_data[i][n])
+     								 {
+     									
+     									 //dijsktra(ed_int,temp_source,temp_dest);
+                                         flag=1;     								
+     									
+     								 }
+     									 
+     								 }
+     							 if(flag==0)
+     								 {
+     								   
+     									 int temp_source = i;
+     									 int temp_dest = as_index(m);
+     									 //System.out.println(temp_dest);
+     									 //System.out.println(temp_dest);
+     									dikstra(temp_source);
+     									int temp_trav=temp_dest;
+     									as_path_index=0;
+     									while(temp_trav!=temp_source)
+     									{
+     										//System.out.println(neigh[temp_trav]);
+     										as_path_index++;
+     										as_path[as_path_index]=neigh[temp_trav];
+     									    
+     									temp_trav=neigh[temp_trav];
+     									}
+     									for(int qw=as_path_index-1;qw>=1;qw--)
+     									{
+     										//System.out.println( as_path[qw]);
+     										row1[m-1][1]+="-AS"+String.valueOf( as_path[qw]);
+     									}
+     									row1[m-1][1]+="-AS"+String.valueOf(temp_dest);
+     								
+     								 }
+     								 
+     								 }
+     						  
      						}
-     						if(speaker_node[i]==3) {
+                            if(speaker_node[i]==3) {
+         						
      							for(int j=0;j<6;j++) {
      								row2[j][1]="AS"+String.valueOf(i);
      							}
      							jp2.setVisible(true);
-     							for(int m=1;m<=6;m++)
- 								{
- 								 if(bgp_data[i][m]!=999) {
- 									 check_as=bgp_data[i][m];
- 									 row2[check_as-1][1]+="(SAME AS)";
- 								 }
- 								}
-     							}
-     						if(speaker_node[i]==4) {
+     							for(int m=1;m<=(int)n_num.getValue();m++)
+     								{
+     								 if(bgp_data[i][m]!=999)
+     								 {
+     									 
+     									 
+     									 check_as=bgp_data[i][m];
+     									 row2[check_as-1][1]+="(SAME AS)";
+     								 }
+     								 
+     								 int flag=0;
+     								 for(int n=1;n<=(int)n_num.getValue();n++)
+     								 {
+     									 if(m==bgp_data[i][n])
+     								 {
+     									
+     									 //dijsktra(ed_int,temp_source,temp_dest);
+                                         flag=1;     								
+     									
+     								 }
+     									 
+     								 }
+     							 if(flag==0)
+     								 {
+     								   
+     									 int temp_source = i;
+     									 int temp_dest = as_index(m);
+     									 //System.out.println(temp_dest);
+     									 //System.out.println(temp_dest);
+     									dikstra(temp_source);
+     									int temp_trav=temp_dest;
+     									as_path_index=0;
+     									while(temp_trav!=temp_source)
+     									{
+     										//System.out.println(neigh[temp_trav]);
+     										as_path_index++;
+     										as_path[as_path_index]=neigh[temp_trav];
+     									    
+     									temp_trav=neigh[temp_trav];
+     									}
+     									for(int qw=as_path_index-1;qw>=1;qw--)
+     									{
+     										//System.out.println( as_path[qw]);
+     										row2[m-1][1]+="-AS"+String.valueOf( as_path[qw]);
+     									}
+     									row2[m-1][1]+="-AS"+String.valueOf(temp_dest);
+     								
+     								 }
+     								 
+     								 }
+     						  
+     						}
+                         if(speaker_node[i]==4) {
+         						
      							for(int j=0;j<6;j++) {
      								row3[j][1]="AS"+String.valueOf(i);
      							}
      							jp3.setVisible(true);
-     							for(int m=1;m<=6;m++)
- 								{
- 								 if(bgp_data[i][m]!=999) {
- 									 check_as=bgp_data[i][m];
- 									 row3[check_as-1][1]+="(SAME AS)";
- 								 }
- 								}
+     							for(int m=1;m<=(int)n_num.getValue();m++)
+     								{
+     								 if(bgp_data[i][m]!=999)
+     								 {
+     									 
+     									 
+     									 check_as=bgp_data[i][m];
+     									 row3[check_as-1][1]+="(SAME AS)";
+     								 }
+     								 
+     								 int flag=0;
+     								 for(int n=1;n<=(int)n_num.getValue();n++)
+     								 {
+     									 if(m==bgp_data[i][n])
+     								 {
+     									
+     									 //dijsktra(ed_int,temp_source,temp_dest);
+                                         flag=1;     								
+     									
+     								 }
+     									 
+     								 }
+     							 if(flag==0)
+     								 {
+     								   
+     									 int temp_source = i;
+     									 int temp_dest = as_index(m);
+     									 //System.out.println(temp_dest);
+     									 //System.out.println(temp_dest);
+     									dikstra(temp_source);
+     									int temp_trav=temp_dest;
+     									as_path_index=0;
+     									while(temp_trav!=temp_source)
+     									{
+     										//System.out.println(neigh[temp_trav]);
+     										as_path_index++;
+     										as_path[as_path_index]=neigh[temp_trav];
+     									    
+     									temp_trav=neigh[temp_trav];
+     									}
+     									for(int qw=as_path_index-1;qw>=1;qw--)
+     									{
+     										//System.out.println( as_path[qw]);
+     										row3[m-1][1]+="-AS"+String.valueOf( as_path[qw]);
+     									}
+     									row3[m-1][1]+="-AS"+String.valueOf(temp_dest);
+     								
+     								 }
+     								 
+     								 }
+     						  
      						}
-     						if(speaker_node[i]==5) {
-     							for(int j=0;j<6;j++) {
-     								row4[j][1]="AS"+String.valueOf(i);
-     							}
-     							jp4.setVisible(true);
-     							for(int m=1;m<=6;m++)
- 								{
- 								 if(bgp_data[i][m]!=999) {
- 									 check_as=bgp_data[i][m];
- 									 row4[check_as-1][1]+="(SAME AS)";
- 								 }
- 								}
-     						}
-     						if(speaker_node[i]==6) {
-     							for(int j=0;j<6;j++) {
-     								row5[j][1]="AS"+String.valueOf(i);
-     							}
-     							jp5.setVisible(true);
-     							for(int m=1;m<=6;m++)
- 								{
- 								 if(bgp_data[i][m]!=999) {
- 									 check_as=bgp_data[i][m];
- 									 row5[check_as-1][1]+="(SAME AS)";
- 								 }
- 								}
-     						}
+                         if(speaker_node[i]==5) {
+      						
+  							for(int j=0;j<6;j++) {
+  								row4[j][1]="AS"+String.valueOf(i);
+  							}
+  							jp4.setVisible(true);
+  							for(int m=1;m<=(int)n_num.getValue();m++)
+  								{
+  								 if(bgp_data[i][m]!=999)
+  								 {
+  									 
+  									 
+  									 check_as=bgp_data[i][m];
+  									 row4[check_as-1][1]+="(SAME AS)";
+  								 }
+  								 
+  								 int flag=0;
+  								 for(int n=1;n<=(int)n_num.getValue();n++)
+  								 {
+  									 if(m==bgp_data[i][n])
+  								 {
+  									
+  									 //dijsktra(ed_int,temp_source,temp_dest);
+                                      flag=1;     								
+  									
+  								 }
+  									 
+  								 }
+  							 if(flag==0)
+  								 {
+  								   
+  									 int temp_source = i;
+  									 int temp_dest = as_index(m);
+  									 //System.out.println(temp_dest);
+  									 //System.out.println(temp_dest);
+  									dikstra(temp_source);
+  									int temp_trav=temp_dest;
+  									as_path_index=0;
+  									while(temp_trav!=temp_source)
+  									{
+  										//System.out.println(neigh[temp_trav]);
+  										as_path_index++;
+  										as_path[as_path_index]=neigh[temp_trav];
+  									    
+  									temp_trav=neigh[temp_trav];
+  									}
+  									for(int qw=as_path_index-1;qw>=1;qw--)
+  									{
+  										//System.out.println( as_path[qw]);
+  										row4[m-1][1]+="-AS"+String.valueOf( as_path[qw]);
+  									}
+  									row4[m-1][1]+="-AS"+String.valueOf(temp_dest);
+  								
+  								 }
+  								 
+  								 }
+  						  
+  						}
+                         if(speaker_node[i]==6) {
+      						
+  							for(int j=0;j<6;j++) {
+  								row5[j][1]="AS"+String.valueOf(i);
+  							}
+  							jp5.setVisible(true);
+  							for(int m=1;m<=(int)n_num.getValue();m++)
+  								{
+  								 if(bgp_data[i][m]!=999)
+  								 {
+  									 
+  									 
+  									 check_as=bgp_data[i][m];
+  									 row5[check_as-1][1]+="(SAME AS)";
+  								 }
+  								 
+  								 int flag=0;
+  								 for(int n=1;n<=(int)n_num.getValue();n++)
+  								 {
+  									 if(m==bgp_data[i][n])
+  								 {
+  									
+  									 //dijsktra(ed_int,temp_source,temp_dest);
+                                      flag=1;     								
+  									
+  								 }
+  									 
+  								 }
+  							 if(flag==0)
+  								 {
+  								   
+  									 int temp_source = i;
+  									 int temp_dest = as_index(m);
+  									 //System.out.println(temp_dest);
+  									 //System.out.println(temp_dest);
+  									dikstra(temp_source);
+  									int temp_trav=temp_dest;
+  									as_path_index=0;
+  									while(temp_trav!=temp_source)
+  									{
+  										//System.out.println(neigh[temp_trav]);
+  										as_path_index++;
+  										as_path[as_path_index]=neigh[temp_trav];
+  									    
+  									temp_trav=neigh[temp_trav];
+  									}
+  									for(int qw=as_path_index-1;qw>=1;qw--)
+  									{
+  										//System.out.println( as_path[qw]);
+  										row5[m-1][1]+="-AS"+String.valueOf( as_path[qw]);
+  									}
+  									row5[m-1][1]+="-AS"+String.valueOf(temp_dest);
+  								
+  								 }
+  								 
+  								 }
+  						  
+  						}
      					}
      				
      					
@@ -750,9 +1031,9 @@ public class BGP_protocol extends JFrame {
     public int as_index(int x)
     {
     	int temp=0;
-    	for(int i=1;i<=6;i++)
+    	for(int i=1;i<=(int)as_num.getValue();i++)
     	{
-    		for(int j=1;j<=6;j++)
+    		for(int j=1;j<=(int)n_num.getValue();j++)
     		if(bgp_data[i][j]==x)
     		{
     			temp=i;
@@ -760,63 +1041,77 @@ public class BGP_protocol extends JFrame {
     	}
     	return temp;
     }
-  public  void dijsktra(int cost[][],int source,int target)
+    public int minValue(int dist[])
     {
-	    int N = 7;
-	    int IN = 99;
-        int dist[] = new int[N];
-        int prev[]= new int[N];
-        int selected[]=new int[N];
-        int i,m,min,start,d,j;
-        int path[] = new int[N];
-        selected[0]=0;
-        for(i=1;i< N;i++)
-        {
-            dist[i] = IN;
-            prev[i] = -1;
-            selected[i]=0;
-        }
-        start = source;
-        selected[start]=1;
-        dist[start] = 0;
-        while(selected[target] ==0)
-        {
-            min = IN;
-            m = 0;
-            for(i=1;i< N;i++)
-            {
-                d = dist[start] +cost[start][i];
-                if(d< dist[i]&&selected[i]==0)
-                {
-                    dist[i] = d;
-                    prev[i] = start;
-                }
-                if(min>dist[i] && selected[i]==0)
-                {
-                    min = dist[i];
-                    m = i;
-                }
-            }
-            start = m;
-            selected[start] = 1;
-        }
-        start = target;
-        j = 0;
-        while(start != -1)
-        {
-            path[j++] = start;
-            start = prev[start];
-        }
-
-        for(int l=1;l<j;l++)
-        {
-            //printf("%d ",path[l]);
-            System.out.println(path[l]+" ");
-        }
-
-
+    	
+    	 int minVal = 999;
+    	 int temp=0;
+    	//index_node = ospf_source;
+    	//if(visited[ospf_source]==true) {minVal=999;}
+    	for(i=1;i<=(int)as_num.getValue();i++)
+    	{
+    		//System.out.println("dist" + visited[i]);
+    		if(minVal>dist[i]&&visited[i]==false)
+    			
+    			
+    		{
+    			//System.out.println("hello");
+    			minVal = dist[i];
+    			temp = i;
+    		}
+    		
+    	}
+    	//System.out.println(index_node);	
+    	
+    	visited[temp]=true;
+    	
+    	return temp;
     }
-
+    public void dikstra(int temp_source)
+    {
+    	
+    	for(i=1;i<=(int)as_num.getValue();i++)
+			{
+				dist[i]=999;
+			}
+			dist[temp_source]=0;
+			for(i=1;i<=(int)as_num.getValue();i++)
+			{
+				visited[i]=false;
+			}
+			for(int k=1;k<=(Integer)as_num.getValue();k++)
+				
+			{
+		      int min_index = minValue(dist); 
+		      //System.out.println(min_index);	 
+		      int mm;
+		      for(mm=1;mm<=(int)as_num.getValue();mm++)
+		      {
+		    	
+		    	if(ed_int[min_index][mm]==1 && visited[mm]==false)
+		    	{
+		    		if(dist[min_index]+ed_int[min_index][mm]<=dist[mm])
+		    		{
+	    			    dist[mm]=dist[min_index]+ed_int[min_index][mm];
+		    			neigh[mm]=min_index;
+                    
+		    			
+		    			 
+		    			
+		    		}
+		    	}
+		    	
+		      }
+		      
+			   
+			}
+		/*	for(int z=1;z<=(int)as_num.getValue();z++)
+			{
+				System.out.println(neigh[z]);
+			}*/
+    
+    	
+    }
     
 
      
