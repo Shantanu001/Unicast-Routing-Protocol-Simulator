@@ -18,7 +18,9 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
@@ -512,6 +514,12 @@ public class MainActivity extends JFrame {
 							row[x_value - 1][2] = row[x_value - 1][0];
 						}
 					}
+				   /* row[0][1] = String.valueOf("-");
+				    row1[1][1] = String.valueOf("-");
+				    row2[2][1] = String.valueOf("-");
+				    row3[3][1] = String.valueOf("-");
+				    row4[4][1] = String.valueOf("-");
+				    row5[5][1] = String.valueOf("-");*/
 					repaint();
 					if (count == edg) {
 						xspin.setEnabled(false);
@@ -533,7 +541,7 @@ public class MainActivity extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 
-				v1 = false; // to set the visibility for nodes on panel 2
+				/*v1 = false; // to set the visibility for nodes on panel 2
 				v2 = false;
 				v3 = false;
 				v4 = false;
@@ -556,6 +564,46 @@ public class MainActivity extends JFrame {
 				yspin.setEnabled(true);
 				spin.setEnabled(true);
 				spin2.setEnabled(true);
+                for(int i=0;i<6;i++)
+                {
+                	for(int j=0;j<3;j++)
+                	{
+                		if(j==0) {
+                			row[i][j]=String.valueOf(i+1);
+                			row1[i][j]=String.valueOf(i+1);
+                			row2[i][j]=String.valueOf(i+1);
+                			row3[i][j]=String.valueOf(i+1);
+                			row4[i][j]=String.valueOf(i+1);
+                			row5[i][j]=String.valueOf(i+1);}
+                		if(j==1) {
+                			row[i][j]=String.valueOf("999");
+                			row1[i][j]=String.valueOf("999");
+                			row2[i][j]=String.valueOf("999");
+                			row3[i][j]=String.valueOf("999");
+                			row4[i][j]=String.valueOf("999");
+                			row5[i][j]=String.valueOf("999");
+                			}
+                		if(j==2) {
+                			row[i][j]=String.valueOf("");
+                			row1[i][j]=String.valueOf("");
+                			row2[i][j]=String.valueOf("");
+                			row3[i][j]=String.valueOf("");
+                			row4[i][j]=String.valueOf("");
+                			row5[i][j]=String.valueOf("");}
+                	}
+                }
+                for (i = 1; i <= 6; i++) {
+        			for (j = 1; j <= 6; j++) {
+        				ospf_row[i][j] = 999;
+        			}
+        		}
+              
+				
+                p3.setVisible(false);*/
+                dispose();
+                MainActivity main_obj = new MainActivity();
+				main_obj.setVisible(true);
+                
 			}
 		});
 		p1.setLayout(new GridBagLayout()); // Setting layout in horizontal manner
@@ -565,6 +613,7 @@ public class MainActivity extends JFrame {
 		p1.add(num_node, gbc);
 		p1.add(spin, gbc);
 		p1.add(num_node2, gbc);
+		
 		p1.add(spin2, gbc);
 		p1.add(num_node3, gbc);
 		p1.add(xspin, gbc);
@@ -1641,7 +1690,7 @@ public class MainActivity extends JFrame {
 				input1_Ospf.setBounds(150, 100, 100, 30);
 				ospf_cont.add(input1_Ospf);
 				cal_Ospf.setBounds(125, 200, 150, 30);
-				ospf_cont.add(close_Ospf);
+				//ospf_cont.add(close_Ospf);
 				close_Ospf.setBounds(125, 250, 150, 30);
 				ospf_cont.add(cal_Ospf);
 				ospf_cont.setLayout(null);
@@ -1766,6 +1815,16 @@ public class MainActivity extends JFrame {
 							}
 							input1_Ospf.setText("");
 						}
+						/*for(i=0;i<6;i++)
+						{
+							for(j=0;j<6;j++)
+							{
+								if(dup_row[i][j][2]==String.valueOf('0'))
+								{
+									dup_row[i][j][2]  = String.valueOf('-');
+								}
+							}
+						}*/
 					}
 				});
 
@@ -1780,17 +1839,15 @@ public class MainActivity extends JFrame {
 				// TODO Auto-generated method stub
 
 				repaint();
-				JFrame protocol_cont = new JFrame();
-				protocol_cont.setSize(500, 100);
-				protocol_cont.setVisible(true);
+				JFrame protocol_cont=new JFrame();  
 				int v = (int) n_num.getValue();
 				int e = (int) v_num.getValue();
 				double ospf_cal = (double) (e + (v * Math.log(v)));
-				double rip_cal = (double) (v);
-				double result = ospf_cal / rip_cal;
+				double rip_cal = (double) (v)* (double)e;
+				double result = rip_cal / ospf_cal;
 				result = BigDecimal.valueOf(result).setScale(3, RoundingMode.HALF_UP).doubleValue();
-				protocol_cont
-						.add(new JLabel("Execution of OSPF for this case is " + result + " times faster than RIP"));
+				
+				  JOptionPane.showMessageDialog(protocol_cont,"Execution of RIP for this case is " + result + " times faster than OSPF","PROTOCOL COMPARISON", JOptionPane.INFORMATION_MESSAGE);  
 
 			}
 		});
